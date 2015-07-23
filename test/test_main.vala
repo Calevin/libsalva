@@ -14,6 +14,7 @@ class Testing.TestMain {
     stdout.printf ( "Tests sobre Salva.BaseDeDatos\n" );
     TestBaseDeDatos test_base_de_datos = new TestBaseDeDatos ();
     test_base_de_datos.test_conectar ();
+    test_base_de_datos.test_insert ();
 
     return 0;
   }

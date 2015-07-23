@@ -23,4 +23,17 @@ class Testing.TestBaseDeDatos {
     }
   }
 
+  public void test_insert () {
+    stdout.printf ( "\nTest sobre el metodo insert :\n" );
+    UnaEntidad ent_para_insert = new UnaEntidad (2, 3, "b");
+
+    bool conexion_satisfactoria = false;
+    conexion_satisfactoria = this.base_test.conectar ();
+    if ( conexion_satisfactoria ) {
+      this.base_test.insert ( "entidades", "rowid, propiedad_unit, propiedad_string" , ent_para_insert, typeof ( UnaEntidad ) );
+    } else {
+      stdout.printf ( "Conexion NO satisfactoria durante el test al metodo insert\n" );
+    }
+
+  }
 }

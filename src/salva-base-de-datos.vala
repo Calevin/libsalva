@@ -20,7 +20,7 @@ using Salva;
 
 public class Salva.BaseDeDatos {
   public string base_datos { public get; public set; }
-  private Sqlite.Database db;
+  public Sqlite.Database db;
 
   public BaseDeDatos ( string base_datos ) {
     this._base_datos = base_datos;
@@ -39,6 +39,31 @@ public class Salva.BaseDeDatos {
     }
 
     return retorno;
+  }
+
+  public void insert ( string tabla, string columnas, Salva.Entidad entidad, Type tipo_entidad) {
+    int rc;
+    string valores = "";
+    Array<string> valores_array = entidad.valores_para_query ();
+
+    for (int i = 0; i < valores_array.length; i++) {
+      valores = valores + valores_array.index (i);
+      if ((i + 1) < valores_array.length) {
+        valores = valores + ",";
+      }
+    }
+
+    if ( this.conectar () ) {
+      string sql_query = "INSERT INTO " + tabla + "(" + columnas + ") VALUES (" + valores + ")";
+      stdout.printf( "QUERY:  %s\n", sql_query );
+
+      rc = this.db.exec ( sql_query, null, null );
+      if ( rc != Sqlite.OK ) {
+            stderr.printf ( "SQL error: %d, %s\n", rc, db.errmsg () );
+      }
+    } else {
+      stdout.printf( "No hubo conexion con la base\n" );
+    }
   }
 
 }
