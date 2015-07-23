@@ -15,8 +15,10 @@ class Testing.TestMain {
     TestBaseDeDatos test_base_de_datos = new TestBaseDeDatos ();
     test_base_de_datos.test_conectar ();
     test_base_de_datos.test_insert ();
-    test_base_de_datos.test_delete ();
     test_base_de_datos.test_update ();
+    test_base_de_datos.test_select ();
+    test_base_de_datos.test_delete ();
+
 
     return 0;
   }

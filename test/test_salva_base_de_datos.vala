@@ -61,4 +61,26 @@ class Testing.TestBaseDeDatos {
       stdout.printf ( "Conexion NO satisfactoria durante el test al metodo update\n" );
     }
   }
+
+  public void test_select () {
+    stdout.printf ( "\nTest sobre el metodo select :\n" );
+    Array<Salva.Entidad> entidades;
+
+    bool conexion_satisfactoria = false;
+    conexion_satisfactoria = this.base_test.conectar ();
+    if ( conexion_satisfactoria ) {
+      entidades = this.base_test.select ( "entidades", "rowid, propiedad_unit, propiedad_string" , {"id", "propiedad_unit", "propiedad_string"},
+                                          typeof ( UnaEntidad ) );
+      UnaEntidad row_entidad;
+      stdout.printf ( "\n\n Entidades: \n" );
+      for (int i = 0; i < entidades.length; i++) {
+        row_entidad = entidades.index (i) as UnaEntidad;
+        stdout.printf ( "ID: %u\n", row_entidad.id );
+        stdout.printf ( "Propiedad Unit: %u\n", row_entidad.propiedad_unit );
+        stdout.printf ( "Propiedad String: %s\n", row_entidad.propiedad_string );
+      }
+    } else {
+      stdout.printf ( "Conexion NO satisfactoria durante el test al metodo select\n" );
+    }
+  }
 }

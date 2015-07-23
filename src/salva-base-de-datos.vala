@@ -129,4 +129,70 @@ public class Salva.BaseDeDatos {
     }
   }
 
+  public Array<Salva.Entidad> select ( string tabla, string campos, string[] propiedades, Type tipo,
+                                       string condicion = "") {
+    int rc;
+    Array<Salva.Entidad> entidades = new Array<Salva.Entidad> ();
+
+    if ( this.conectar () ) {
+      string sql_query = "SELECT " + campos + " FROM " + tabla + this.armar_condicion ( condicion );
+      Sqlite.Statement stmt;
+      stdout.printf( "QUERY:  %s\n", sql_query );
+      rc = this.db.prepare_v2 ( sql_query, -1, out stmt, null );
+
+      if ( rc == Sqlite.ERROR ) {
+        stderr.printf ( "Error al ejecutar la query: %s -%d -%s", sql_query, rc,
+                        this.db.errmsg () );
+      }
+
+      int cols = stmt.column_count ();
+
+      do {
+        // Se instancia un objeto del tipo a retornar
+        var entidad = Object.new ( tipo );
+        rc = stmt.step ();
+        switch ( rc  ) {
+          case Sqlite.DONE:
+            break;
+          case Sqlite.ROW:
+            for ( int j = 0; j < cols; j++ ) {
+
+              int columna_tipo = stmt.column_type ( j );
+              //Se seteo el valor de la columna a su correspondiente propiedad en la instancia
+              //TODO completar el switch
+              switch (columna_tipo) {
+                case Sqlite.INTEGER:
+                  entidad.set_property (propiedades[j], stmt.column_int ( j ));
+                break;
+                case Sqlite.TEXT:
+                  entidad.set_property (propiedades[j], stmt.column_text ( j ));
+                break;
+                case Sqlite.FLOAT:
+                  entidad.set_property (propiedades[j], stmt.column_double ( j ));
+                break;
+                default :
+                  //TODO revisar el comportamiento del dato no soportado
+                  stdout.printf("Tipo de dato no soportado\n");
+                break;
+              }
+            }
+            entidades.append_val ( entidad as Salva.Entidad );
+            break;
+          default:
+            print ( "Error parseando respuesta de la base de datos" );
+            break;
+        }
+      } while ( rc == Sqlite.ROW );
+    }
+    return entidades;
+  }
+
+  private string armar_condicion ( string condicion ) {
+    string retorno = "";
+    if ( condicion != "" ) {
+      retorno = " WHERE " + condicion;
+    }
+    return retorno;
+  }
+
 }
