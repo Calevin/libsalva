@@ -1,15 +1,20 @@
 using Salva;
+using Sqlite;
 
 class Testing.TestMain {
 
   public static int main ( string[] args ) {
-    stdout.printf ("Iniciando test\n");
-    UnaEntidad ent = new UnaEntidad (1, 2, "a");
-    Array<string> props = ent.valores_para_query ();
-    stdout.printf ("Propiedades:\n");
-    for (int i = 0; i < props.length; i++) {
-      stdout.printf ("Propiedad: %s\n", props.index ( i) );
-    }
+
+    stdout.printf ( "Iniciando tests\n" );
+
+    stdout.printf ( "Tests sobre Salva.Entidad\n" );
+    TestEntidad test_entidad = new TestEntidad ();
+    test_entidad.test_valores_para_query ();
+
+    stdout.printf ( "Tests sobre Salva.BaseDeDatos\n" );
+    TestBaseDeDatos test_base_de_datos = new TestBaseDeDatos ();
+    test_base_de_datos.test_conectar ();
+
     return 0;
   }
 }

@@ -4,7 +4,6 @@ public class Testing.UnaEntidad : Salva.Entidad {
   public string propiedad_string { public get; public set; }
 
   public UnaEntidad (uint id, uint un_uint, string un_string) {
-    stdout.printf ("Creando UnaEntidad\n");
     base (id);
     this._propiedad_unit = un_uint;
     this._propiedad_string = un_string;
