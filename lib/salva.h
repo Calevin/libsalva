@@ -8,6 +8,7 @@
 #include <glib-object.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sqlite3.h>
 
 G_BEGIN_DECLS
 
@@ -23,6 +24,28 @@ typedef struct _SalvaEntidad SalvaEntidad;
 typedef struct _SalvaEntidadClass SalvaEntidadClass;
 typedef struct _SalvaEntidadPrivate SalvaEntidadPrivate;
 
+#define SALVA_TYPE_BASE_DE_DATOS (salva_base_de_datos_get_type ())
+#define SALVA_BASE_DE_DATOS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SALVA_TYPE_BASE_DE_DATOS, SalvaBaseDeDatos))
+#define SALVA_BASE_DE_DATOS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SALVA_TYPE_BASE_DE_DATOS, SalvaBaseDeDatosClass))
+#define SALVA_IS_BASE_DE_DATOS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SALVA_TYPE_BASE_DE_DATOS))
+#define SALVA_IS_BASE_DE_DATOS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SALVA_TYPE_BASE_DE_DATOS))
+#define SALVA_BASE_DE_DATOS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SALVA_TYPE_BASE_DE_DATOS, SalvaBaseDeDatosClass))
+
+typedef struct _SalvaBaseDeDatos SalvaBaseDeDatos;
+typedef struct _SalvaBaseDeDatosClass SalvaBaseDeDatosClass;
+typedef struct _SalvaBaseDeDatosPrivate SalvaBaseDeDatosPrivate;
+
+#define SALVA_TYPE_ENTIDAD_DAO (salva_entidad_dao_get_type ())
+#define SALVA_ENTIDAD_DAO(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SALVA_TYPE_ENTIDAD_DAO, SalvaEntidadDAO))
+#define SALVA_ENTIDAD_DAO_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SALVA_TYPE_ENTIDAD_DAO, SalvaEntidadDAOClass))
+#define SALVA_IS_ENTIDAD_DAO(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SALVA_TYPE_ENTIDAD_DAO))
+#define SALVA_IS_ENTIDAD_DAO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SALVA_TYPE_ENTIDAD_DAO))
+#define SALVA_ENTIDAD_DAO_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SALVA_TYPE_ENTIDAD_DAO, SalvaEntidadDAOClass))
+
+typedef struct _SalvaEntidadDAO SalvaEntidadDAO;
+typedef struct _SalvaEntidadDAOClass SalvaEntidadDAOClass;
+typedef struct _SalvaEntidadDAOPrivate SalvaEntidadDAOPrivate;
+
 struct _SalvaEntidad {
 	GObject parent_instance;
 	SalvaEntidadPrivate * priv;
@@ -32,6 +55,33 @@ struct _SalvaEntidadClass {
 	GObjectClass parent_class;
 };
 
+struct _SalvaBaseDeDatos {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	SalvaBaseDeDatosPrivate * priv;
+	sqlite3* db;
+};
+
+struct _SalvaBaseDeDatosClass {
+	GTypeClass parent_class;
+	void (*finalize) (SalvaBaseDeDatos *self);
+};
+
+struct _SalvaEntidadDAO {
+	GObject parent_instance;
+	SalvaEntidadDAOPrivate * priv;
+};
+
+struct _SalvaEntidadDAOClass {
+	GObjectClass parent_class;
+	gchar** (*get_propiedades) (SalvaEntidadDAO* self, int* result_length1);
+	gchar* (*get_nombre_tabla) (SalvaEntidadDAO* self);
+	gchar* (*get_columnas_tabla) (SalvaEntidadDAO* self);
+	GType (*get_tipo_entidad) (SalvaEntidadDAO* self);
+	void (*set_db) (SalvaEntidadDAO* self, SalvaBaseDeDatos* db);
+	SalvaBaseDeDatos* (*get_db) (SalvaEntidadDAO* self);
+};
+
 
 GType salva_entidad_get_type (void) G_GNUC_CONST;
 SalvaEntidad* salva_entidad_new (guint id);
@@ -39,6 +89,35 @@ SalvaEntidad* salva_entidad_construct (GType object_type, guint id);
 GArray* salva_entidad_valores_para_query (SalvaEntidad* self);
 guint salva_entidad_get_id (SalvaEntidad* self);
 void salva_entidad_set_id (SalvaEntidad* self, guint value);
+gpointer salva_base_de_datos_ref (gpointer instance);
+void salva_base_de_datos_unref (gpointer instance);
+GParamSpec* salva_param_spec_base_de_datos (const gchar* name, const gchar* nick, const gchar* blurb, GType object_type, GParamFlags flags);
+void salva_value_set_base_de_datos (GValue* value, gpointer v_object);
+void salva_value_take_base_de_datos (GValue* value, gpointer v_object);
+gpointer salva_value_get_base_de_datos (const GValue* value);
+GType salva_base_de_datos_get_type (void) G_GNUC_CONST;
+SalvaBaseDeDatos* salva_base_de_datos_new (const gchar* base_datos);
+SalvaBaseDeDatos* salva_base_de_datos_construct (GType object_type, const gchar* base_datos);
+gboolean salva_base_de_datos_conectar (SalvaBaseDeDatos* self);
+void salva_base_de_datos_insert (SalvaBaseDeDatos* self, const gchar* tabla, const gchar* columnas, SalvaEntidad* entidad, GType tipo_entidad);
+void salva_base_de_datos_delet (SalvaBaseDeDatos* self, const gchar* tabla, SalvaEntidad* entidad);
+void salva_base_de_datos_update (SalvaBaseDeDatos* self, const gchar* tabla, const gchar* columnas, SalvaEntidad* entidad, GType tipo_entidad);
+GArray* salva_base_de_datos_select (SalvaBaseDeDatos* self, const gchar* tabla, const gchar* campos, gchar** propiedades, int propiedades_length1, GType tipo, const gchar* condicion);
+const gchar* salva_base_de_datos_get_base_datos (SalvaBaseDeDatos* self);
+void salva_base_de_datos_set_base_datos (SalvaBaseDeDatos* self, const gchar* value);
+GType salva_entidad_dao_get_type (void) G_GNUC_CONST;
+gchar** salva_entidad_dao_get_propiedades (SalvaEntidadDAO* self, int* result_length1);
+gchar* salva_entidad_dao_get_nombre_tabla (SalvaEntidadDAO* self);
+gchar* salva_entidad_dao_get_columnas_tabla (SalvaEntidadDAO* self);
+GType salva_entidad_dao_get_tipo_entidad (SalvaEntidadDAO* self);
+void salva_entidad_dao_set_db (SalvaEntidadDAO* self, SalvaBaseDeDatos* db);
+SalvaBaseDeDatos* salva_entidad_dao_get_db (SalvaEntidadDAO* self);
+void salva_entidad_dao_insertar (SalvaEntidadDAO* self, SalvaEntidad* entidad);
+void salva_entidad_dao_borrar (SalvaEntidadDAO* self, SalvaEntidad* entidad);
+void salva_entidad_dao_actualizar (SalvaEntidadDAO* self, SalvaEntidad* entidad);
+GArray* salva_entidad_dao_get_todos (SalvaEntidadDAO* self);
+GArray* salva_entidad_dao_get_todos_segun_condicion (SalvaEntidadDAO* self, const gchar* condicion);
+SalvaEntidadDAO* salva_entidad_dao_construct (GType object_type);
 
 
 G_END_DECLS

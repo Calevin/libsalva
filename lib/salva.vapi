@@ -2,9 +2,35 @@
 
 namespace Salva {
 	[CCode (cheader_filename = "salva.h")]
+	public class BaseDeDatos {
+		public Sqlite.Database db;
+		public BaseDeDatos (string base_datos);
+		public bool conectar ();
+		public void delet (string tabla, Salva.Entidad entidad);
+		public void insert (string tabla, string columnas, Salva.Entidad entidad, GLib.Type tipo_entidad);
+		public GLib.Array<Salva.Entidad> select (string tabla, string campos, string[] propiedades, GLib.Type tipo, string condicion = "");
+		public void update (string tabla, string columnas, Salva.Entidad entidad, GLib.Type tipo_entidad);
+		public string base_datos { get; set; }
+	}
+	[CCode (cheader_filename = "salva.h")]
 	public class Entidad : GLib.Object {
 		public Entidad (uint id);
 		public GLib.Array<string> valores_para_query ();
 		public uint id { get; protected set; }
+	}
+	[CCode (cheader_filename = "salva.h")]
+	public abstract class EntidadDAO : GLib.Object {
+		public EntidadDAO ();
+		public void actualizar (Salva.Entidad entidad);
+		public void borrar (Salva.Entidad entidad);
+		protected abstract string get_columnas_tabla ();
+		protected abstract Salva.BaseDeDatos get_db ();
+		protected abstract string get_nombre_tabla ();
+		protected abstract string[] get_propiedades ();
+		protected abstract GLib.Type get_tipo_entidad ();
+		public GLib.Array<Salva.Entidad> get_todos ();
+		public GLib.Array<Salva.Entidad> get_todos_segun_condicion (string condicion);
+		public void insertar (Salva.Entidad entidad);
+		public abstract void set_db (Salva.BaseDeDatos db);
 	}
 }
