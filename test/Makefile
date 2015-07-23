@@ -3,7 +3,7 @@ all:
 
 NAME=salva
 LIBNAME=lib$(NAME)
-SOURCE_FILES=test_main.vala test_salva_entidad.vala test_salva_base_de_datos.vala una_entidad.vala
+SOURCE_FILES=test_main.vala test_salva_entidad.vala test_salva_base_de_datos.vala una_entidad.vala una_entidad_dao.vala test_salva_entidad_dao.vala
 PACKAGES=--pkg sqlite3
 
 sources:

@@ -43,7 +43,7 @@ public class Salva.Entidad : GLib.Object {
           //Se comprueba si el valor de la propiedad es string
           if ( valor_propiedad.holds ( typeof ( string ) ) ) {
             //En caso de ser String el valor va entre comillas en la query
-            valor = " \"" + valor_propiedad.get_string () + "\"";
+            valor = "\"" + valor_propiedad.get_string () + "\"";
 
           } else {
             //En caso de no ser string, se castea a string para agregarlo a la query

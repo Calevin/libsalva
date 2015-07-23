@@ -51,12 +51,12 @@ class Testing.TestBaseDeDatos {
 
   public void test_update () {
     stdout.printf ( "\nTest sobre el metodo update :\n" );
-    UnaEntidad ent_para_insert = new UnaEntidad ( 1, 2, "modificado" );
+    UnaEntidad ent_para_update = new UnaEntidad ( 1, 2, "update" );
 
     bool conexion_satisfactoria = false;
     conexion_satisfactoria = this.base_test.conectar ();
     if ( conexion_satisfactoria ) {
-      this.base_test.update ( "entidades", "rowid, propiedad_unit, propiedad_string" , ent_para_insert, typeof ( UnaEntidad ) );
+      this.base_test.update ( "entidades", "rowid, propiedad_unit, propiedad_string" , ent_para_update, typeof ( UnaEntidad ) );
     } else {
       stdout.printf ( "Conexion NO satisfactoria durante el test al metodo update\n" );
     }

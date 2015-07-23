@@ -11,7 +11,7 @@ class Testing.TestMain {
     TestEntidad test_entidad = new TestEntidad ();
     test_entidad.test_valores_para_query ();
 
-    stdout.printf ( "Tests sobre Salva.BaseDeDatos\n" );
+    stdout.printf ( "\nTests sobre Salva.BaseDeDatos\n" );
     TestBaseDeDatos test_base_de_datos = new TestBaseDeDatos ();
     test_base_de_datos.test_conectar ();
     test_base_de_datos.test_insert ();
@@ -19,6 +19,11 @@ class Testing.TestMain {
     test_base_de_datos.test_select ();
     test_base_de_datos.test_delete ();
 
+    stdout.printf ( "\nTests sobre Salva.EntidadDAO\n" );
+    TestEntidadDAO test_entidad_dao = new TestEntidadDAO ();
+    test_entidad_dao.test_insertar ();
+    test_entidad_dao.test_actualizar();
+    test_entidad_dao.test_borrar ();
 
     return 0;
   }
