@@ -66,4 +66,31 @@ public class Salva.BaseDeDatos {
     }
   }
 
+  public void delet ( string tabla, Salva.Entidad entidad) {
+    int rc;
+    string where = "";
+
+    //Obtengo el valor del atributo ID
+    GLib.Value propiedad_id_value = GLib.Value ( typeof ( uint ) );
+    entidad.get_property ( "id", ref propiedad_id_value );
+    //Casteo el id a string para agregarlo a la query
+    GLib.Value id_value_string = GLib.Value ( typeof( string ) );
+    propiedad_id_value.transform ( ref id_value_string );
+
+    //Agrego el valor del id a la sentencia WHERE
+    where = " rowid = " + id_value_string.get_string ();
+
+    if ( this.conectar () ) {
+      string sql_query = "DELETE FROM " + tabla + " WHERE " + where;
+      stdout.printf("QUERY:  %s\n", sql_query);
+
+      rc = this.db.exec ( sql_query, null, null);
+      if (rc != Sqlite.OK) {
+            stderr.printf ( "SQL error: %d, %s\n", rc, db.errmsg () );
+      }
+    } else {
+      stdout.printf( "No hubo conexion con la base\n" );
+    }
+  }
+
 }

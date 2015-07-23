@@ -8,4 +8,9 @@ public class Testing.UnaEntidad : Salva.Entidad {
     this._propiedad_unit = un_uint;
     this._propiedad_string = un_string;
   }
+
+  public UnaEntidad.UnaEntidad_id (uint id) {
+    base (id);
+  }
+
 }

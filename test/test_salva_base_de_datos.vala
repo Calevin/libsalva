@@ -25,7 +25,7 @@ class Testing.TestBaseDeDatos {
 
   public void test_insert () {
     stdout.printf ( "\nTest sobre el metodo insert :\n" );
-    UnaEntidad ent_para_insert = new UnaEntidad (2, 3, "b");
+    UnaEntidad ent_para_insert = new UnaEntidad ( 1, 2, "b" );
 
     bool conexion_satisfactoria = false;
     conexion_satisfactoria = this.base_test.conectar ();
@@ -34,6 +34,18 @@ class Testing.TestBaseDeDatos {
     } else {
       stdout.printf ( "Conexion NO satisfactoria durante el test al metodo insert\n" );
     }
+  }
 
+  public void test_delete () {
+    stdout.printf ( "\nTest sobre el metodo delete :\n" );
+    UnaEntidad ent_para_borrar = new UnaEntidad.UnaEntidad_id ( 1 );
+
+    bool conexion_satisfactoria = false;
+    conexion_satisfactoria = this.base_test.conectar ();
+    if ( conexion_satisfactoria ) {
+      this.base_test.delet ( "entidades", ent_para_borrar );
+    } else {
+      stdout.printf ( "Conexion NO satisfactoria durante el test al metodo delete\n" );
+    }
   }
 }
