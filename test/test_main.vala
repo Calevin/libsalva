@@ -16,6 +16,7 @@ class Testing.TestMain {
     test_base_de_datos.test_conectar ();
     test_base_de_datos.test_insert ();
     test_base_de_datos.test_delete ();
+    test_base_de_datos.test_update ();
 
     return 0;
   }

@@ -48,4 +48,17 @@ class Testing.TestBaseDeDatos {
       stdout.printf ( "Conexion NO satisfactoria durante el test al metodo delete\n" );
     }
   }
+
+  public void test_update () {
+    stdout.printf ( "\nTest sobre el metodo update :\n" );
+    UnaEntidad ent_para_insert = new UnaEntidad ( 1, 2, "modificado" );
+
+    bool conexion_satisfactoria = false;
+    conexion_satisfactoria = this.base_test.conectar ();
+    if ( conexion_satisfactoria ) {
+      this.base_test.update ( "entidades", "rowid, propiedad_unit, propiedad_string" , ent_para_insert, typeof ( UnaEntidad ) );
+    } else {
+      stdout.printf ( "Conexion NO satisfactoria durante el test al metodo update\n" );
+    }
+  }
 }

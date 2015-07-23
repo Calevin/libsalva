@@ -59,7 +59,7 @@ public class Salva.BaseDeDatos {
 
       rc = this.db.exec ( sql_query, null, null );
       if ( rc != Sqlite.OK ) {
-            stderr.printf ( "SQL error: %d, %s\n", rc, db.errmsg () );
+            stderr.printf ( "SQL error: %d, %s\n", rc, this.db.errmsg () );
       }
     } else {
       stdout.printf( "No hubo conexion con la base\n" );
@@ -86,7 +86,43 @@ public class Salva.BaseDeDatos {
 
       rc = this.db.exec ( sql_query, null, null);
       if (rc != Sqlite.OK) {
-            stderr.printf ( "SQL error: %d, %s\n", rc, db.errmsg () );
+            stderr.printf ( "SQL error: %d, %s\n", rc, this.db.errmsg () );
+      }
+    } else {
+      stdout.printf( "No hubo conexion con la base\n" );
+    }
+  }
+
+  public void update ( string tabla, string columnas, Salva.Entidad entidad, Type tipo_entidad) {
+    int rc;
+    string valores = "";
+    string[] columnas_array = columnas.split_set ( "," );
+    string where = "";
+
+    Array<string> valores_array = entidad.valores_para_query ();
+    //Se considera el primer atributo como el ID
+    where = " rowid = " + valores_array.index ( 0 );
+
+    //Se recorren los atributos de la clase
+    //Se obtienen los valores de la instancia
+    for (int i = 1; i < valores_array.length; i++) {
+      //Se agregan los valores al SET
+      //Nombre de la columna seguido de "=" seguido del valor
+      valores = valores + columnas_array[i] + "=" + valores_array.index (i);
+
+      //Agrego una coma despues del valor, a menos que sea el ultimo valor
+      if ( ( i + 1 ) < valores_array.length) {
+        valores = valores + ",";
+      }
+    }
+
+    if ( this.conectar () ) {
+      string sql_query = "UPDATE " + tabla + " SET " + valores + " WHERE " + where;
+      stdout.printf("QUERY:  %s\n", sql_query);
+
+      rc = this.db.exec ( sql_query, null, null);
+      if (rc != Sqlite.OK) {
+            stderr.printf ( "SQL error: %d, %s\n", rc, this.db.errmsg () );
       }
     } else {
       stdout.printf( "No hubo conexion con la base\n" );
