@@ -5,16 +5,17 @@ using Salva;
 */
 class Testing.TestBaseDeDatos {
   string base_datos_test = "./testsalva.db";
+  BaseDeDatos base_test;
 
   public TestBaseDeDatos () {
+    this.base_test = new BaseDeDatos ( base_datos_test );
   }
 
   public void test_conectar () {
     stdout.printf ( "\nTest sobre el metodo conectar :\n" );
 
-    Sqlite.Database db;
     bool conexion_satisfactoria = false;
-    conexion_satisfactoria = BaseDeDatos.conectar ( base_datos_test, out db );
+    conexion_satisfactoria = this.base_test.conectar ();
     if ( conexion_satisfactoria ) {
       stdout.printf ( "Conexion satisfactoria\n" );
     } else {

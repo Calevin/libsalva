@@ -19,15 +19,21 @@
 using Salva;
 
 public class Salva.BaseDeDatos {
+  public string base_datos { public get; public set; }
+  private Sqlite.Database db;
 
-  public static bool conectar ( string archivo_db, out Sqlite.Database db ) {
+  public BaseDeDatos ( string base_datos ) {
+    this._base_datos = base_datos;
+  }
+
+  public bool conectar () {
     bool retorno = false;
 
-    int rc = Sqlite.Database.open ( archivo_db, out db );
+    int rc = Sqlite.Database.open ( this.base_datos, out this.db );
 
     if ( rc != Sqlite.OK ) {
       stderr.printf ( "No se pudo abrir la base de datos" + ": %d, %s\n",
-                      rc, db.errmsg () );
+                      rc, this.db.errmsg () );
     } else {
       retorno = true;
     }
