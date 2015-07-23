@@ -46,4 +46,16 @@ public abstract class Salva.EntidadDAO : GLib.Object {
     db.update ( get_nombre_tabla (), get_columnas_tabla (), entidad, get_tipo_entidad () );
   }
 
+  public Array<Entidad> get_todos () {
+    Salva.BaseDeDatos db = get_db ();
+    return db.select( get_nombre_tabla (), get_columnas_tabla (),
+      get_propiedades (), get_tipo_entidad () );
+  }
+
+  public Array<Entidad> get_todos_segun_condicion ( string condicion ) {
+    Salva.BaseDeDatos db = get_db ();
+    return db.select( get_nombre_tabla (), get_columnas_tabla (),
+      get_propiedades (), get_tipo_entidad (), condicion );
+  }
+
 }

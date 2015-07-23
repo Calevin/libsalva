@@ -24,6 +24,8 @@ class Testing.TestMain {
     test_entidad_dao.test_insertar ();
     test_entidad_dao.test_actualizar();
     test_entidad_dao.test_borrar ();
+    test_entidad_dao.test_get_todos ();
+    test_entidad_dao.test_get_todos_segun_condicion ();
 
     return 0;
   }

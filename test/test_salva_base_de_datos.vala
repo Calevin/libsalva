@@ -5,6 +5,9 @@ using Salva;
 */
 class Testing.TestBaseDeDatos {
   string base_datos_test = "./testsalva.db";
+  string nombre_tabla = "entidades";
+  string columnas_tabla = "rowid, propiedad_unit, propiedad_string";
+  string[] propiedades_entidad = {"id", "propiedad_unit", "propiedad_string"};
   BaseDeDatos base_test;
 
   public TestBaseDeDatos () {
@@ -30,7 +33,7 @@ class Testing.TestBaseDeDatos {
     bool conexion_satisfactoria = false;
     conexion_satisfactoria = this.base_test.conectar ();
     if ( conexion_satisfactoria ) {
-      this.base_test.insert ( "entidades", "rowid, propiedad_unit, propiedad_string" , ent_para_insert, typeof ( UnaEntidad ) );
+      this.base_test.insert ( nombre_tabla, columnas_tabla , ent_para_insert, typeof ( UnaEntidad ) );
     } else {
       stdout.printf ( "Conexion NO satisfactoria durante el test al metodo insert\n" );
     }
@@ -43,7 +46,7 @@ class Testing.TestBaseDeDatos {
     bool conexion_satisfactoria = false;
     conexion_satisfactoria = this.base_test.conectar ();
     if ( conexion_satisfactoria ) {
-      this.base_test.delet ( "entidades", ent_para_borrar );
+      this.base_test.delet ( nombre_tabla, ent_para_borrar );
     } else {
       stdout.printf ( "Conexion NO satisfactoria durante el test al metodo delete\n" );
     }
@@ -56,7 +59,7 @@ class Testing.TestBaseDeDatos {
     bool conexion_satisfactoria = false;
     conexion_satisfactoria = this.base_test.conectar ();
     if ( conexion_satisfactoria ) {
-      this.base_test.update ( "entidades", "rowid, propiedad_unit, propiedad_string" , ent_para_update, typeof ( UnaEntidad ) );
+      this.base_test.update ( nombre_tabla, columnas_tabla , ent_para_update, typeof ( UnaEntidad ) );
     } else {
       stdout.printf ( "Conexion NO satisfactoria durante el test al metodo update\n" );
     }
@@ -69,7 +72,7 @@ class Testing.TestBaseDeDatos {
     bool conexion_satisfactoria = false;
     conexion_satisfactoria = this.base_test.conectar ();
     if ( conexion_satisfactoria ) {
-      entidades = this.base_test.select ( "entidades", "rowid, propiedad_unit, propiedad_string" , {"id", "propiedad_unit", "propiedad_string"},
+      entidades = this.base_test.select ( nombre_tabla, columnas_tabla , propiedades_entidad,
                                           typeof ( UnaEntidad ) );
       UnaEntidad row_entidad;
       stdout.printf ( "\n\n Entidades: \n" );
