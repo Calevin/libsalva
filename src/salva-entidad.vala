@@ -20,35 +20,35 @@
 public class Salva.Entidad : GLib.Object {
   public uint id { public get; protected set; }
 
-  public Entidad (uint id) {
+  public Entidad ( uint id ) {
     this._id = id;
   }
 
   public Array<string> valores_para_query () {
-    //Obtengo los atributos de la clase
-    ObjectClass clase_entidad = (ObjectClass) (this.get_type ()).class_ref ();
+    //Se obtienene los atributos de la clase
+    ObjectClass clase_entidad = ( ObjectClass ) ( this.get_type () ).class_ref ();
     ParamSpec[] propiedades_entidad = clase_entidad.list_properties ();
 
     Array<string> valores = new Array<string> ();
     string valor = "";
 
-    //Recorro los atributos de la clase
-    //para obtener los valores de la instancia
-    foreach (ParamSpec propiedad in propiedades_entidad) {
-        GLib.Value valor_propiedad = GLib.Value (propiedad.value_type);
-        //Obtengo el valor de la propiedad (como Value)
-        this.get_property (propiedad.get_name (), ref valor_propiedad);
-        //Si no es array se toma el valor
-        if ( !valor_propiedad.holds ( typeof(Array) )) {
-          //Comprueba si el valor de la propiedad es string
-          if ( valor_propiedad.holds ( typeof(string) )) {
-            //Es String por lo tanto el valor en la query va entre comillas
+    //Se recorren los atributos de la clase 
+    //Se obtienen los valores de la instancia
+    foreach ( ParamSpec propiedad in propiedades_entidad ) {
+        GLib.Value valor_propiedad = GLib.Value ( propiedad.value_type );
+        //Se obtiene el valor de la propiedad (Value)
+        this.get_property ( propiedad.get_name (), ref valor_propiedad );
+        //En caso de no ser un array se tomara el valor
+        if ( !valor_propiedad.holds ( typeof ( Array ) ) ) {
+          //Se comprueba si el valor de la propiedad es string
+          if ( valor_propiedad.holds ( typeof ( string ) ) ) {
+            //En caso de ser String el valor va entre comillas en la query
             valor = " \"" + valor_propiedad.get_string () + "\"";
 
           } else {
-            //No es string, lo casteo a string para agregarlo a la query
-            GLib.Value valor_propiedad_como_string = GLib.Value (typeof(string));
-            valor_propiedad.transform (ref valor_propiedad_como_string);
+            //En caso de no ser string, se castea a string para agregarlo a la query
+            GLib.Value valor_propiedad_como_string = GLib.Value ( typeof ( string ) );
+            valor_propiedad.transform ( ref valor_propiedad_como_string );
 
             valor = valor_propiedad_como_string.get_string ();
           }
