@@ -1,6 +1,6 @@
 /* -*- Mode: vala; indent-tabs-mode: t; c-basic-offset: 2; tab-width: 2 -*-  */
 /*
- * salva-base-de-datos.vala
+ * salva_base_de_datos.vala
  * Copyright (C) 2015 Sebastian Barreto <sebastian.e.barreto@gmail.com>
  *
  * libsalva is free software: you can redistribute it and/or modify it

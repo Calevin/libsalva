@@ -8,7 +8,6 @@ all:
 
 NAME=salva
 LIBNAME=lib$(NAME)
-SOURCE_FILES=salva-entidad.vala
 #PACKAGES=--pkg gee-1.0 --pkg libxml-2.0 --pkg libsoup-2.4  $(PACKAGES)
 VALAC=valac
 

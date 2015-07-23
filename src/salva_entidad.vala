@@ -1,6 +1,6 @@
 /* -*- Mode: vala; indent-tabs-mode: nil; c-basic-offset: 4; tab-width: 4 -*-  */
 /*
- * salva-entidad.vala
+ * salva_entidad.vala
  * Copyright (C) 2015 Sebastian Barreto <sebastian.e.barreto@gmail.com>
  *
  * libsalva is free software: you can redistribute it and/or modify it
