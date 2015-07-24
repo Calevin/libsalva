@@ -89,9 +89,7 @@ class Testing.TestBaseDeDatos {
 
   public void test_ejecutar_query () {
     stdout.printf ( "\nTest sobre el metodo ejecutar query :\n" );
-    Array<Salva.Entidad> entidades;
     bool resultado_de_la_ejecucion = false;
-
     bool conexion_satisfactoria = false;
     conexion_satisfactoria = this.base_test.conectar ();
     if ( conexion_satisfactoria ) {

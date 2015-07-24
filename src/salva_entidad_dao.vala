@@ -46,16 +46,33 @@ public abstract class Salva.EntidadDAO : GLib.Object {
     db.update ( get_nombre_tabla (), get_columnas_tabla (), entidad, get_tipo_entidad () );
   }
 
-  public Array<Entidad> get_todos () {
+  public Array<Salva.Entidad> get_todos () {
     Salva.BaseDeDatos db = get_db ();
     return db.select( get_nombre_tabla (), get_columnas_tabla (),
       get_propiedades (), get_tipo_entidad () );
   }
 
-  public Array<Entidad> get_todos_segun_condicion ( string condicion ) {
+  public Array<Salva.Entidad> get_todos_segun_condicion ( string condicion ) {
     Salva.BaseDeDatos db = get_db ();
     return db.select( get_nombre_tabla (), get_columnas_tabla (),
       get_propiedades (), get_tipo_entidad (), condicion );
   }
 
+  public Array<Salva.Entidad> get_entidades_relacionadas ( Salva.Entidad entidad, Salva.EntidadDAO dao_entidad_relacionada ) {
+    string nombre_tabla = get_nombre_tabla ();
+    string nombre_tabla_sin_s = nombre_tabla.substring ( 0, ( nombre_tabla.length - 1 ) );
+    string condicion_join = nombre_tabla_sin_s + "_rowid=" + entidad.id.to_string();
+
+    return dao_entidad_relacionada.get_todos_segun_condicion ( condicion_join );
+  }
+
+  public void borrar_entidades_relacionadas ( Salva.Entidad entidad, Salva.EntidadDAO dao_entidad_relacionada ) {
+    Array<Salva.Entidad> entidades_relacionadas = get_entidades_relacionadas ( entidad, dao_entidad_relacionada );
+
+    stdout.printf ( "Se borraran %u entidades relacionadas\n", entidades_relacionadas.length );
+    for ( int i = 0; i < entidades_relacionadas.length; i++ ) {
+      Salva.Entidad entidad_a_borrar = entidades_relacionadas.index (i);
+      dao_entidad_relacionada.borrar ( entidad_a_borrar );
+    }
+  }
 }

@@ -54,7 +54,7 @@ public class Salva.BaseDeDatos {
     }
 
     if ( this.conectar () ) {
-      string sql_query = "INSERT INTO " + tabla + "(" + columnas + ") VALUES (" + valores + ")";
+      string sql_query = "INSERT INTO " + tabla + " (" + columnas + ") VALUES (" + valores + ")";
       stdout.printf( "QUERY:  %s\n", sql_query );
 
       rc = this.db.exec ( sql_query, null, null );
@@ -78,7 +78,7 @@ public class Salva.BaseDeDatos {
     propiedad_id_value.transform ( ref id_value_string );
 
     //Agrego el valor del id a la sentencia WHERE
-    where = " rowid = " + id_value_string.get_string ();
+    where = "rowid=" + id_value_string.get_string ();
 
     if ( this.conectar () ) {
       string sql_query = "DELETE FROM " + tabla + " WHERE " + where;
@@ -101,7 +101,7 @@ public class Salva.BaseDeDatos {
 
     Array<string> valores_array = entidad.valores_para_query ();
     //Se considera el primer atributo como el ID
-    where = " rowid = " + valores_array.index ( 0 );
+    where = "rowid = " + valores_array.index ( 0 );
 
     //Se recorren los atributos de la clase
     //Se obtienen los valores de la instancia
@@ -117,7 +117,7 @@ public class Salva.BaseDeDatos {
     }
 
     if ( this.conectar () ) {
-      string sql_query = "UPDATE " + tabla + " SET " + valores + " WHERE " + where;
+      string sql_query = "UPDATE " + tabla + " SET" + valores + " WHERE " + where;
       stdout.printf("QUERY:  %s\n", sql_query);
 
       rc = this.db.exec ( sql_query, null, null);
