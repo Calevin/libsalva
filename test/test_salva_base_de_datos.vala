@@ -86,4 +86,24 @@ class Testing.TestBaseDeDatos {
       stdout.printf ( "Conexion NO satisfactoria durante el test al metodo select\n" );
     }
   }
+
+  public void test_ejecutar_query () {
+    stdout.printf ( "\nTest sobre el metodo ejecutar query :\n" );
+    Array<Salva.Entidad> entidades;
+    bool resultado_de_la_ejecucion = false;
+
+    bool conexion_satisfactoria = false;
+    conexion_satisfactoria = this.base_test.conectar ();
+    if ( conexion_satisfactoria ) {
+    resultado_de_la_ejecucion = this.base_test.ejecutar_query ( "SELECT 1" );
+      if ( resultado_de_la_ejecucion ) {
+        stdout.printf ( "Ejecucion correcta\n" );
+      } else {
+        stdout.printf ( "Ejecucion NO correcta\n" );
+      }
+    } else {
+      stdout.printf ( "Conexion NO satisfactoria durante el test al metodo ejecutar query\n" );
+    }
+  }
+
 }

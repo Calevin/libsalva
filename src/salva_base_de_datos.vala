@@ -187,6 +187,24 @@ public class Salva.BaseDeDatos {
     return entidades;
   }
 
+  public bool ejecutar_query ( string query ) {
+    bool retorno = true;
+    int rc;
+
+    if ( this.conectar () ) {
+      stdout.printf( "QUERY:  %s\n", query) ;
+
+      rc = this.db.exec ( query, null, null);
+      if ( rc != Sqlite.OK ) {
+            stderr.printf ( "SQL error: %d, %s\n", rc, this.db.errmsg () );
+      }
+    } else {
+      stdout.printf( "No hubo conexion con la base\n" );
+    }
+
+    return retorno;
+  }
+
   private string armar_condicion ( string condicion ) {
     string retorno = "";
     if ( condicion != "" ) {
