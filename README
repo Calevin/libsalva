@@ -1,0 +1,18 @@
+# libsalva
+ORM/Data Mapper Library for Vala/GLib.
+
+## Building ##
+$ make
+
+## Install ##
+$ sudo make install
+
+## Uninstall ##
+$ sudo make uninstall
+
+## Tests & Examples ##
+See /test directory.
+
+To run the examples, execute
+
+$ /correr_test.sh
