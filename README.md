@@ -18,7 +18,7 @@ Ver carpeta [/test](https://github.com/Calevin/libsalva/tree/master/test "Carpet
 
 Se pueden correr los test (sin instalar la libreria) con:
 ```shell
-$ /correr_test.sh
+$ ./correr_test.sh
 ```
 ## Compilar usando la libreria ##
 ```shell
