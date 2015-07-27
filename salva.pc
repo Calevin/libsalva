@@ -1,0 +1,11 @@
+prefix=/usr
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${exec_prefix}/include
+
+Name: Salva
+Description: ORM Data Mapper library for Vala programming language.
+Version: 0.0.1
+Requires: sqlite3
+Libs: -L${libdir} -lsalva
+Cflags: -I${includedir}

@@ -8,4 +8,4 @@ PACKAGES=--pkg sqlite3
 VALAC=valac
 
 sources:
-	$(VALAC) --library $(LIBNAME).so -o $(LIBNAME).so -X -fPIC -X --shared $(SOURCE_FILES) --vapi $(NAME).vapi -H $(NAME).h $(PACKAGES)
+	$(VALAC) --library=$(LIBNAME) -o $(LIBNAME).so -X -fPIC -X --shared $(SOURCE_FILES) --vapi $(NAME).vapi -H $(NAME).h $(PACKAGES)

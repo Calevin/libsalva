@@ -2,13 +2,8 @@ all:
 	make library
 	make copy_library
 
-#sources:
-#Se compilan los archivos .vala
-#	cd ./src && make
-
 NAME=salva
 LIBNAME=lib$(NAME)
-#PACKAGES=--pkg gee-1.0 --pkg libxml-2.0 --pkg libsoup-2.4  $(PACKAGES)
 VALAC=valac
 
 library:
@@ -21,8 +16,8 @@ copy_library:
 #Se crea la carpeta lib
 	mkdir lib
 #Se copia el .deps, el .pc a la carpeta lib
-#	cp $(NAME).deps lib/
-#	cp $(NAME).pc lib/
+	cp $(NAME).deps lib/
+	cp $(NAME).pc lib/
 #Se mueve el .h, el .so. y el vapi de la carpeta src a la carpeta lib
 	mv src/$(NAME).h src/$(LIBNAME).so src/$(NAME).vapi lib/
 
@@ -33,9 +28,9 @@ clean:
 install:
 	cp lib/$(LIBNAME).so /usr/lib/
 	cp lib/$(NAME).vapi /usr/share/vala/vapi
-#	cp lib/$(NAME).deps /usr/share/vala/vapi
+	cp lib/$(NAME).deps /usr/share/vala/vapi
 	cp lib/$(NAME).h /usr/include
-#	cp lib/$(NAME).pc /usr/lib/pkgconfig/
+	cp lib/$(NAME).pc /usr/lib/pkgconfig/
 
 uninstall:
 	rm -f /usr/lib/$(LIBNAME).so
