@@ -23,6 +23,12 @@ class Testing.TestEntidadDAO {
     this.una_entidad_dao.insertar ( ent_para_insert );
   }
 
+  public void test_insertar_sin_id () {
+    stdout.printf ( "\nTest sobre el metodo insertar (Entidad sin ID)\n" );
+    UnaEntidad ent_para_insert = new UnaEntidad.UnaEntidad_sin_id ( 10, "z" );
+    this.una_entidad_dao.insertar ( ent_para_insert );
+  }
+
   public void test_actualizar () {
     stdout.printf ( "\nTest sobre el metodo actualizar:\n" );
     UnaEntidad ent_para_actualizar = new UnaEntidad ( 1, 1, "actualizar" );
@@ -33,6 +39,7 @@ class Testing.TestEntidadDAO {
     stdout.printf ( "\nTest sobre el metodo borrar:\n" );
     UnaEntidad ent_para_borrar = new UnaEntidad.UnaEntidad_id ( 1 );
     this.una_entidad_dao.borrar ( ent_para_borrar );
+    this.una_entidad_dao.borrar ( new UnaEntidad.UnaEntidad_id ( 2 ) );
   }
 
   public void test_get_todos () {

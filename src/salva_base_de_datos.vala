@@ -41,10 +41,16 @@ public class Salva.BaseDeDatos {
     return retorno;
   }
 
-  public void insert ( string tabla, string columnas, Salva.Entidad entidad, Type tipo_entidad) {
+  public void insert ( string tabla, owned string columnas, Salva.Entidad entidad, Type tipo_entidad) {
     int rc;
     string valores = "";
     Array<string> valores_array = entidad.valores_para_query ();
+
+    //Si el ID no fue asignado se suprime del insert
+    if ( entidad.id == 0 ) {
+        columnas = columnas.replace ("rowid, ", "" );
+        valores_array.remove_index (0);
+    }
 
     for (int i = 0; i < valores_array.length; i++) {
       valores = valores + valores_array.index (i);

@@ -7,12 +7,12 @@
  * under the terms of the GNU General Public License as published by the
  * Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * libsalva is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  * See the GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -24,6 +24,10 @@ public class Salva.Entidad : GLib.Object {
     this._id = id;
   }
 
+  public Entidad.Entidad_sin_id ( ) {
+    this._id = 0;
+  }
+
   public Array<string> valores_para_query () {
     //Se obtienene los atributos de la clase
     ObjectClass clase_entidad = ( ObjectClass ) ( this.get_type () ).class_ref ();
@@ -32,7 +36,7 @@ public class Salva.Entidad : GLib.Object {
     Array<string> valores = new Array<string> ();
     string valor = "";
 
-    //Se recorren los atributos de la clase 
+    //Se recorren los atributos de la clase
     //Se obtienen los valores de la instancia
     foreach ( ParamSpec propiedad in propiedades_entidad ) {
         GLib.Value valor_propiedad = GLib.Value ( propiedad.value_type );
