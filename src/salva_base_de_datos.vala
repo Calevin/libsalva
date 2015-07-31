@@ -18,7 +18,7 @@
  */
 using Salva;
 
-private const string log_domain = "Salva.BaseDeDatos";
+private const string log_domain_base_de_datos = "Salva.BaseDeDatos";
 public errordomain BaseDeDatosError {
   OPEN_FAIL,
   EXEC_QUERY,
@@ -38,7 +38,7 @@ public class Salva.BaseDeDatos {
   public bool conectar () throws BaseDeDatosError {
     bool conexion_satisfactoria = false;
 
-    GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_MESSAGE, "Base de datos a conectarse URI: %s\n", this.base_datos);
+    GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_MESSAGE, "Base de datos a conectarse URI: %s\n", this.base_datos);
 
     int rc = Sqlite.Database.open ( this.base_datos, out this.db );
 
@@ -46,7 +46,7 @@ public class Salva.BaseDeDatos {
     if ( !conexion_satisfactoria ) {
       string error_mensaje = "No se pudo abrir la base de datos. Result Code: %d. Mesaje de Error: %s\n".printf ( rc, this.db.errmsg () );
 
-      GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+      GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
       throw new BaseDeDatosError.OPEN_FAIL ( error_mensaje );
     }
 
@@ -138,7 +138,7 @@ public class Salva.BaseDeDatos {
 
     if ( this.conectar () ) {
       string sql_query = "SELECT " + campos + " FROM " + tabla + this.armar_condicion ( condicion );
-      GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_MESSAGE, "Query a ejecutar: %s\n", sql_query);
+      GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_MESSAGE, "Query a ejecutar: %s\n", sql_query);
 
       Sqlite.Statement stmt;
       rc = this.db.prepare_v2 ( sql_query, -1, out stmt, null );
@@ -146,7 +146,7 @@ public class Salva.BaseDeDatos {
       if ( rc == Sqlite.ERROR ) {
         string error_mensaje = "Error al ejecutar la query: %s. Result Code: %d. Mesaje de Error: %s\n".printf ( sql_query, rc, this.db.errmsg () );
 
-        GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+        GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
         throw new BaseDeDatosError.EXEC_QUERY ( error_mensaje );
       }
 
@@ -179,7 +179,7 @@ public class Salva.BaseDeDatos {
                   //TODO revisar el comportamiento del dato no soportado
                   string error_mensaje = "Tipo de dato no soportado. Codigo Tipo: %u\n".printf ( columna_tipo );
 
-                  GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+                  GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
                   throw new BaseDeDatosError.PARSER_RESULT ( error_mensaje );
                 break;
               }
@@ -190,7 +190,7 @@ public class Salva.BaseDeDatos {
           default:
             string error_mensaje = "Error parseando respuesta de la base de datos. Codigo Respuesta: %u\n".printf ( rc );
 
-            GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+            GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
             throw new BaseDeDatosError.PARSER_RESULT ( error_mensaje );
             break;
         }
@@ -207,13 +207,13 @@ public class Salva.BaseDeDatos {
     int rc;
 
     if ( this.conectar () ) {
-      GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_MESSAGE, "Query a ejecutar: %s\n", sql_query);
+      GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_MESSAGE, "Query a ejecutar: %s\n", sql_query);
 
       rc = this.db.exec ( sql_query, null, null );
       if ( rc != Sqlite.OK ) {
         string error_mensaje = "SQL error: %d, %s\n".printf ( rc, this.db.errmsg () );
 
-        GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+        GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
         throw new BaseDeDatosError.EXEC_QUERY ( error_mensaje );
       }
     }
