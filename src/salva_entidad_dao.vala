@@ -33,7 +33,7 @@ public abstract class Salva.EntidadDAO : GLib.Object {
 
   public void insertar ( Salva.Entidad entidad ) {
     Salva.BaseDeDatos db = get_db ();
-    db.insert ( get_nombre_tabla (), get_columnas_tabla (), entidad, get_tipo_entidad () );
+    db.insert ( get_nombre_tabla (), get_columnas_tabla (), entidad );
   }
 
   public void borrar ( Salva.Entidad entidad ) {

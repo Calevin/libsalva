@@ -18,31 +18,45 @@
  */
 using Salva;
 
+private const string log_domain = "Salva.BaseDeDatos";
+public errordomain BaseDeDatosError {
+  OPEN_FAIL,
+  EXEC_QUERY,
+  PARSER_RESULT
+}
+
 public class Salva.BaseDeDatos {
   public string base_datos { public get; public set; }
   public Sqlite.Database db;
 
-  public BaseDeDatos ( string base_datos ) {
+  public BaseDeDatos ( string base_datos )
+  requires ( base_datos != "" )
+  {
     this._base_datos = base_datos;
   }
 
-  public bool conectar () {
-    bool retorno = false;
+  public bool conectar () throws BaseDeDatosError {
+    bool conexion_satisfactoria = false;
+
+    GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_MESSAGE, "Base de datos a conectarse URI: %s\n", this.base_datos);
 
     int rc = Sqlite.Database.open ( this.base_datos, out this.db );
 
-    if ( rc != Sqlite.OK ) {
-      stderr.printf ( "No se pudo abrir la base de datos" + ": %d, %s\n",
-                      rc, this.db.errmsg () );
-    } else {
-      retorno = true;
+    conexion_satisfactoria = (rc == Sqlite.OK);
+    if ( !conexion_satisfactoria ) {
+      string error_mensaje = "No se pudo abrir la base de datos. Result Code: %d. Mesaje de Error: %s\n".printf ( rc, this.db.errmsg () );
+
+      GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+      throw new BaseDeDatosError.OPEN_FAIL ( error_mensaje );
     }
 
-    return retorno;
+    return conexion_satisfactoria;
   }
 
-  public void insert ( string tabla, owned string columnas, Salva.Entidad entidad, Type tipo_entidad) {
-    int rc;
+  public void insert ( string tabla, owned string columnas, Salva.Entidad entidad)
+  throws BaseDeDatosError
+  requires ( tabla != "" && columnas != "")
+  {
     string valores = "";
     Array<string> valores_array = entidad.valores_para_query ();
 
@@ -58,22 +72,14 @@ public class Salva.BaseDeDatos {
         valores = valores + ",";
       }
     }
-
-    if ( this.conectar () ) {
-      string sql_query = "INSERT INTO " + tabla + " (" + columnas + ") VALUES (" + valores + ")";
-      stdout.printf( "QUERY:  %s\n", sql_query );
-
-      rc = this.db.exec ( sql_query, null, null );
-      if ( rc != Sqlite.OK ) {
-            stderr.printf ( "SQL error: %d, %s\n", rc, this.db.errmsg () );
-      }
-    } else {
-      stdout.printf( "No hubo conexion con la base\n" );
-    }
+    string sql_query = "INSERT INTO " + tabla + " (" + columnas + ") VALUES (" + valores + ")";
+    this.ejecutar_query ( sql_query );
   }
 
-  public void delet ( string tabla, Salva.Entidad entidad) {
-    int rc;
+  public void delet ( string tabla, Salva.Entidad entidad)
+  throws BaseDeDatosError
+  requires ( tabla != "" )
+  {
     string where = "";
 
     //Obtengo el valor del atributo ID
@@ -86,21 +92,15 @@ public class Salva.BaseDeDatos {
     //Agrego el valor del id a la sentencia WHERE
     where = "rowid=" + id_value_string.get_string ();
 
-    if ( this.conectar () ) {
-      string sql_query = "DELETE FROM " + tabla + " WHERE " + where;
-      stdout.printf("QUERY:  %s\n", sql_query);
-
-      rc = this.db.exec ( sql_query, null, null);
-      if (rc != Sqlite.OK) {
-            stderr.printf ( "SQL error: %d, %s\n", rc, this.db.errmsg () );
-      }
-    } else {
-      stdout.printf( "No hubo conexion con la base\n" );
-    }
+    string sql_query = "DELETE FROM " + tabla + " WHERE " + where;
+    this.ejecutar_query ( sql_query );
   }
 
-  public void update ( string tabla, string columnas, Salva.Entidad entidad, Type tipo_entidad) {
-    int rc;
+  public void update ( string tabla, string columnas, Salva.Entidad entidad, Type tipo_entidad )
+  throws BaseDeDatosError
+  requires ( tabla != "" && columnas != "")
+  requires ( tipo_entidad.is_a ( typeof ( Salva.Entidad ) ) )
+  {
     string valores = "";
     string[] columnas_array = columnas.split_set ( "," );
     string where = "";
@@ -117,51 +117,50 @@ public class Salva.BaseDeDatos {
       valores = valores + columnas_array[i] + "=" + valores_array.index (i);
 
       //Agrego una coma despues del valor, a menos que sea el ultimo valor
-      if ( ( i + 1 ) < valores_array.length) {
+      if ( ( i + 1 ) < valores_array.length ) {
         valores = valores + ",";
       }
     }
 
-    if ( this.conectar () ) {
-      string sql_query = "UPDATE " + tabla + " SET" + valores + " WHERE " + where;
-      stdout.printf("QUERY:  %s\n", sql_query);
-
-      rc = this.db.exec ( sql_query, null, null);
-      if (rc != Sqlite.OK) {
-            stderr.printf ( "SQL error: %d, %s\n", rc, this.db.errmsg () );
-      }
-    } else {
-      stdout.printf( "No hubo conexion con la base\n" );
-    }
+    string sql_query = "UPDATE " + tabla + " SET" + valores + " WHERE " + where;
+    this.ejecutar_query ( sql_query );
   }
 
-  public Array<Salva.Entidad> select ( string tabla, string campos, string[] propiedades, Type tipo,
-                                       string condicion = "") {
+  public Array<Salva.Entidad> select ( string tabla, string campos, string[] propiedades, Type tipo_entidad,
+                                       string condicion = "")
+  throws BaseDeDatosError
+  requires ( tabla != "" && campos != "")
+  requires ( propiedades.length > 0 )
+  requires ( tipo_entidad.is_a ( typeof ( Salva.Entidad ) ) )
+  {
     int rc;
     Array<Salva.Entidad> entidades = new Array<Salva.Entidad> ();
 
     if ( this.conectar () ) {
       string sql_query = "SELECT " + campos + " FROM " + tabla + this.armar_condicion ( condicion );
+      GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_MESSAGE, "Query a ejecutar: %s\n", sql_query);
+
       Sqlite.Statement stmt;
-      stdout.printf( "QUERY:  %s\n", sql_query );
       rc = this.db.prepare_v2 ( sql_query, -1, out stmt, null );
 
       if ( rc == Sqlite.ERROR ) {
-        stderr.printf ( "Error al ejecutar la query: %s -%d -%s", sql_query, rc,
-                        this.db.errmsg () );
+        string error_mensaje = "Error al ejecutar la query: %s. Result Code: %d. Mesaje de Error: %s\n".printf ( sql_query, rc, this.db.errmsg () );
+
+        GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+        throw new BaseDeDatosError.EXEC_QUERY ( error_mensaje );
       }
 
-      int cols = stmt.column_count ();
+      int cantidad_columnas = stmt.column_count ();
 
       do {
         // Se instancia un objeto del tipo a retornar
-        var entidad = Object.new ( tipo );
+        var entidad = Object.new ( tipo_entidad );
         rc = stmt.step ();
         switch ( rc  ) {
           case Sqlite.DONE:
             break;
           case Sqlite.ROW:
-            for ( int j = 0; j < cols; j++ ) {
+            for ( int j = 0; j < cantidad_columnas; j++ ) {
 
               int columna_tipo = stmt.column_type ( j );
               //Se seteo el valor de la columna a su correspondiente propiedad en la instancia
@@ -178,14 +177,21 @@ public class Salva.BaseDeDatos {
                 break;
                 default :
                   //TODO revisar el comportamiento del dato no soportado
-                  stdout.printf("Tipo de dato no soportado\n");
+                  string error_mensaje = "Tipo de dato no soportado. Codigo Tipo: %u\n".printf ( columna_tipo );
+
+                  GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+                  throw new BaseDeDatosError.PARSER_RESULT ( error_mensaje );
                 break;
               }
             }
+
             entidades.append_val ( entidad as Salva.Entidad );
             break;
           default:
-            print ( "Error parseando respuesta de la base de datos" );
+            string error_mensaje = "Error parseando respuesta de la base de datos. Codigo Respuesta: %u\n".printf ( rc );
+
+            GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+            throw new BaseDeDatosError.PARSER_RESULT ( error_mensaje );
             break;
         }
       } while ( rc == Sqlite.ROW );
@@ -193,21 +199,24 @@ public class Salva.BaseDeDatos {
     return entidades;
   }
 
-  public bool ejecutar_query ( string query ) {
+  public bool ejecutar_query ( string sql_query )
+  throws BaseDeDatosError
+  requires ( sql_query != "" )
+  {
     bool retorno = true;
     int rc;
 
     if ( this.conectar () ) {
-      stdout.printf( "QUERY:  %s\n", query) ;
+      GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_MESSAGE, "Query a ejecutar: %s\n", sql_query);
 
-      rc = this.db.exec ( query, null, null);
+      rc = this.db.exec ( sql_query, null, null );
       if ( rc != Sqlite.OK ) {
-            stderr.printf ( "SQL error: %d, %s\n", rc, this.db.errmsg () );
-      }
-    } else {
-      stdout.printf( "No hubo conexion con la base\n" );
-    }
+        string error_mensaje = "SQL error: %d, %s\n".printf ( rc, this.db.errmsg () );
 
+        GLib.log( log_domain, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+        throw new BaseDeDatosError.EXEC_QUERY ( error_mensaje );
+      }
+    }
     return retorno;
   }
 

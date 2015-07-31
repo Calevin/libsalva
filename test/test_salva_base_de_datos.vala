@@ -33,7 +33,7 @@ class Testing.TestBaseDeDatos {
     bool conexion_satisfactoria = false;
     conexion_satisfactoria = this.base_test.conectar ();
     if ( conexion_satisfactoria ) {
-      this.base_test.insert ( nombre_tabla, columnas_tabla , ent_para_insert, typeof ( UnaEntidad ) );
+      this.base_test.insert ( nombre_tabla, columnas_tabla , ent_para_insert );
     } else {
       stdout.printf ( "Conexion NO satisfactoria durante el test al metodo insert\n" );
     }
