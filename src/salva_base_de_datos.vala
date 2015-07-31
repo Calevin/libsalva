@@ -96,10 +96,9 @@ public class Salva.BaseDeDatos {
     this.ejecutar_query ( sql_query );
   }
 
-  public void update ( string tabla, string columnas, Salva.Entidad entidad, Type tipo_entidad )
+  public void update ( string tabla, string columnas, Salva.Entidad entidad )
   throws BaseDeDatosError
   requires ( tabla != "" && columnas != "")
-  requires ( tipo_entidad.is_a ( typeof ( Salva.Entidad ) ) )
   {
     string valores = "";
     string[] columnas_array = columnas.split_set ( "," );

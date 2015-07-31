@@ -46,7 +46,7 @@ public abstract class Salva.EntidadDAO : GLib.Object {
 
   public void actualizar ( Salva.Entidad entidad ) throws BaseDeDatosError {
     Salva.BaseDeDatos db = get_db ();
-    db.update ( get_nombre_tabla (), get_columnas_tabla (), entidad, get_tipo_entidad () );
+    db.update ( get_nombre_tabla (), get_columnas_tabla (), entidad );
   }
 
   public Array<Salva.Entidad> get_todos () throws BaseDeDatosError {
