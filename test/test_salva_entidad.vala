@@ -4,20 +4,15 @@ using Salva;
 * Clase para tests sobre Salva.Entidad (salva_entidad.vala)
 */
 class Testing.TestEntidad {
-  UnaEntidad ent_test;
 
-  public TestEntidad () {
-    this.ent_test = new UnaEntidad (1, 2, "a");
-  }
+  public static void test_valores_para_query () {
+    GLib.Test.message ( "Test sobre el metodo valores_para_query()" );
 
-  //TODO comprobar valores en vez de mostrarlos por pantalla
-  public void test_valores_para_query () {
-    stdout.printf ( "\nTest sobre el metodo valores_para_query():\n" );
+    UnaEntidad entidad_test = new UnaEntidad ( 1, 2, "a" );
+    Array<string> valores_propiedades = entidad_test.valores_para_query ();
 
-    Array<string> props = this.ent_test.valores_para_query ();
-    stdout.printf ( "Propiedades:\n" );
-    for (int i = 0; i < props.length; i++) {
-      stdout.printf ( "Propiedad: %s\n", props.index ( i) );
-    }
+    assert ( valores_propiedades.index (0) == "1" );
+    assert ( valores_propiedades.index (1) == "2" );
+    assert ( valores_propiedades.index (2) == "\"a\"" );
   }
 }
