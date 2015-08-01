@@ -6,6 +6,7 @@ using Salva;
 class Testing.TestBaseDeDatos {
 
   public static void test_conectar () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Test sobre el metodo conectar" );
 
     BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
@@ -21,6 +22,7 @@ class Testing.TestBaseDeDatos {
   }
 
   public static void test_insert () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Test sobre el metodo insert" );
     string nombre_tabla = "entidades";
     string columnas_tabla = "rowid, propiedad_unit, propiedad_string";
@@ -37,6 +39,7 @@ class Testing.TestBaseDeDatos {
   }
 
   public static void test_delete () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Test sobre el metodo delete" );
     string nombre_tabla = "entidades";
     UnaEntidad ent_para_borrar = new UnaEntidad.UnaEntidad_id ( 1 );
@@ -52,6 +55,7 @@ class Testing.TestBaseDeDatos {
   }
 
   public static void test_update () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Test sobre el metodo update" );
     string nombre_tabla = "entidades";
     string columnas_tabla = "rowid, propiedad_unit, propiedad_string";
@@ -68,6 +72,7 @@ class Testing.TestBaseDeDatos {
   }
 
   public static void test_select () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Test sobre el metodo select" );
     string nombre_tabla = "entidades";
     string columnas_tabla = "rowid, propiedad_unit, propiedad_string";
@@ -93,6 +98,7 @@ class Testing.TestBaseDeDatos {
   }
 
   public static void test_ejecutar_query () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Test sobre el metodo ejecutar query" );
     BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
     try {

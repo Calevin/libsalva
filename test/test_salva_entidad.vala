@@ -6,6 +6,7 @@ using Salva;
 class Testing.TestEntidad {
 
   public static void test_valores_para_query () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Test sobre el metodo valores_para_query()" );
 
     UnaEntidad entidad_test = new UnaEntidad ( 1, 2, "a" );
