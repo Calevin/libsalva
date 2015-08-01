@@ -28,7 +28,6 @@ class Testing.TestBaseDeDatos {
     BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
 
     try {
-        base_test.conectar ();
         base_test.insert ( nombre_tabla, columnas_tabla , ent_para_insert );
     } catch ( BaseDeDatosError e ) {
         assert_not_reached();
@@ -44,7 +43,6 @@ class Testing.TestBaseDeDatos {
     BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
 
     try {
-        base_test.conectar ();
         base_test.delet ( nombre_tabla, ent_para_borrar );
     } catch ( BaseDeDatosError e ) {
         assert_not_reached();
@@ -61,7 +59,6 @@ class Testing.TestBaseDeDatos {
     BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
 
     try {
-        base_test.conectar ();
         base_test.update ( nombre_tabla, columnas_tabla , ent_para_update );
     } catch ( BaseDeDatosError e ) {
         assert_not_reached();
@@ -79,7 +76,6 @@ class Testing.TestBaseDeDatos {
     Array<Salva.Entidad> entidades;
 
     try {
-      base_test.conectar ();
       entidades = base_test.select ( nombre_tabla, columnas_tabla , propiedades_entidad,
                                           typeof ( UnaEntidad ) );
       UnaEntidad row_entidad;
@@ -97,10 +93,9 @@ class Testing.TestBaseDeDatos {
   }
 
   public static void test_ejecutar_query () {
-    GLib.Test.message ( "\nTest sobre el metodo ejecutar query" );
+    GLib.Test.message ( "Test sobre el metodo ejecutar query" );
     BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
     try {
-      base_test.conectar ();
       assert ( base_test.ejecutar_query ( "SELECT 1" ) );
     } catch ( BaseDeDatosError e ) {
         assert_not_reached();
