@@ -10,9 +10,8 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo insertar" );
     UnaEntidad ent_para_insert = new UnaEntidad ( 1, 1, "a" );
 
-    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
     BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
-    una_entidad_dao.set_db ( base_test );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     try {
       una_entidad_dao.insertar ( ent_para_insert );
@@ -28,9 +27,8 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo insertar (Entidad sin ID)" );
     UnaEntidad ent_para_insert = new UnaEntidad.UnaEntidad_sin_id ( 10, "z" );
 
-    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
     BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
-    una_entidad_dao.set_db ( base_test );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     try {
       una_entidad_dao.insertar ( ent_para_insert );
@@ -46,9 +44,8 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo actualizar" );
     UnaEntidad ent_para_actualizar = new UnaEntidad ( 1, 1, "actualizar" );
 
-    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
     BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
-    una_entidad_dao.set_db ( base_test );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     try {
       una_entidad_dao.actualizar ( ent_para_actualizar );
@@ -64,9 +61,8 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo borrar" );
     UnaEntidad ent_para_borrar = new UnaEntidad.UnaEntidad_id ( 1 );
 
-    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
     BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
-    una_entidad_dao.set_db ( base_test );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     try {
       una_entidad_dao.borrar ( ent_para_borrar );
@@ -83,9 +79,8 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo get_todos" );
     insertar_entidades_para_test ();
 
-    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
     BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
-    una_entidad_dao.set_db ( base_test );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
     try {
       Array<Salva.Entidad> entidades = una_entidad_dao.get_todos ();
       UnaEntidad row_entidad;
@@ -115,9 +110,8 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo get_todos_segun_condicion" );
     insertar_entidades_para_test ();
 
-    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
     BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
-    una_entidad_dao.set_db ( base_test );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     GLib.Test.message ( "Se ejecuta el select con condicion. Entidades con propiedad_string='conjunto'" );
     try {
@@ -145,11 +139,9 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo get_entidades_relacionadas" );
     insertar_entidades_relacionadas_para_test ();
 
-    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
     BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
-    una_entidad_dao.set_db ( base_test );
-    EntidadRelacionadaDao entidad_relacionada_dao = new EntidadRelacionadaDao ();
-    entidad_relacionada_dao.set_db  ( base_test );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
+    EntidadRelacionadaDao entidad_relacionada_dao = new EntidadRelacionadaDao ( base_test );
 
     try {
       Array<Salva.Entidad> entidades = una_entidad_dao.get_entidades_relacionadas (
@@ -178,11 +170,9 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo borrar_entidades_relacionadas" );
     insertar_entidades_relacionadas_para_test ();
 
-    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
     BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
-    una_entidad_dao.set_db ( base_test );
-    EntidadRelacionadaDao entidad_relacionada_dao = new EntidadRelacionadaDao ();
-    entidad_relacionada_dao.set_db  ( base_test );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
+    EntidadRelacionadaDao entidad_relacionada_dao = new EntidadRelacionadaDao ( base_test );
 
     try {
       una_entidad_dao.borrar_entidades_relacionadas ( new UnaEntidad.UnaEntidad_id ( 1 ),

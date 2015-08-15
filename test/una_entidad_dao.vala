@@ -4,7 +4,10 @@ public class Testing.UnaEntidadDao : Salva.EntidadDAO {
   private string _nombre_tabla = "entidades";
   private string _columnas_tabla = "rowid, propiedad_unit, propiedad_string";
   private Type _tipo_entidad = typeof ( UnaEntidad );
-  private Salva.BaseDeDatos _db;
+
+  public UnaEntidadDao ( Salva.BaseDeDatos db ) {
+    base ( db );
+  }
 
   protected override string[] get_propiedades () {
     return this._propiedades;
@@ -22,11 +25,4 @@ public class Testing.UnaEntidadDao : Salva.EntidadDAO {
     return this._tipo_entidad;
   }
 
-  public override void set_db ( Salva.BaseDeDatos db ) {
-    this._db = db;
-  }
-
-  protected override Salva.BaseDeDatos get_db () {
-    return this._db;
-  }
 }

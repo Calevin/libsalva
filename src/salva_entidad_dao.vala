@@ -22,6 +22,8 @@ private const string log_domain_entidad_dao = "Salva.EntidadDAO";
 
 public abstract class Salva.EntidadDAO : GLib.Object {
 
+  protected Salva.BaseDeDatos _db;
+
   protected abstract string[] get_propiedades ();
 
   protected abstract string get_nombre_tabla ();
@@ -30,28 +32,24 @@ public abstract class Salva.EntidadDAO : GLib.Object {
 
   protected abstract Type get_tipo_entidad ();
 
-  public abstract void set_db ( Salva.BaseDeDatos db );
-
-  protected abstract Salva.BaseDeDatos get_db ();
+  protected EntidadDAO ( Salva.BaseDeDatos db ) {
+    this._db = db;
+  }
 
   public void insertar ( Salva.Entidad entidad ) throws BaseDeDatosError {
-    Salva.BaseDeDatos db = get_db ();
-    db.insert ( get_nombre_tabla (), get_columnas_tabla (), entidad );
+    this._db.insert ( get_nombre_tabla (), get_columnas_tabla (), entidad );
   }
 
   public void borrar ( Salva.Entidad entidad ) throws BaseDeDatosError {
-    Salva.BaseDeDatos db = get_db ();
-    db.delet ( get_nombre_tabla (), entidad );
+    this._db.delet ( get_nombre_tabla (), entidad );
   }
 
   public void actualizar ( Salva.Entidad entidad ) throws BaseDeDatosError {
-    Salva.BaseDeDatos db = get_db ();
-    db.update ( get_nombre_tabla (), get_columnas_tabla (), entidad );
+    this._db.update ( get_nombre_tabla (), get_columnas_tabla (), entidad );
   }
 
   public Array<Salva.Entidad> get_todos () throws BaseDeDatosError {
-    Salva.BaseDeDatos db = get_db ();
-    return db.select( get_nombre_tabla (), get_columnas_tabla (),
+    return this._db.select( get_nombre_tabla (), get_columnas_tabla (),
       get_propiedades (), get_tipo_entidad () );
   }
 
@@ -59,8 +57,7 @@ public abstract class Salva.EntidadDAO : GLib.Object {
   throws BaseDeDatosError
   requires ( condicion != "")
   {
-    Salva.BaseDeDatos db = get_db ();
-    return db.select( get_nombre_tabla (), get_columnas_tabla (),
+    return this._db.select( get_nombre_tabla (), get_columnas_tabla (),
       get_propiedades (), get_tipo_entidad (), condicion );
   }
 
