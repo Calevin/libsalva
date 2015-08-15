@@ -16,7 +16,6 @@ class Testing.TestMain {
 
     GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Tests sobre Salva.BaseDeDatos." );
-    Test.add_func ( "/TestBaseDeDatos/test_conectar", TestBaseDeDatos.test_conectar );
     Test.add_func ( "/TestBaseDeDatos/test_insert", TestBaseDeDatos.test_insert );
     Test.add_func ( "/TestBaseDeDatos/test_update", TestBaseDeDatos.test_update );
     Test.add_func ( "/TestBaseDeDatos/test_select", TestBaseDeDatos.test_select );

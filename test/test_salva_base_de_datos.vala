@@ -5,22 +5,6 @@ using Salva;
 */
 class Testing.TestBaseDeDatos {
 
-  public static void test_conectar () {
-    GLib.Test.message ( "-------------------------------------------------------------------" );
-    GLib.Test.message ( "Test sobre el metodo conectar" );
-
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
-    try {
-        bool conexion_satisfactoria = false;
-        conexion_satisfactoria = base_test.conectar ();
-        assert ( conexion_satisfactoria );
-    } catch ( BaseDeDatosError e ) {
-        assert_not_reached();
-    } finally {
-      base_test = null;
-    }
-  }
-
   public static void test_insert () {
     GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Test sobre el metodo insert" );

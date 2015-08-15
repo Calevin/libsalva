@@ -27,7 +27,8 @@ public errordomain BaseDeDatosError {
 
 public class Salva.BaseDeDatos {
   public string base_datos { public get; public set; }
-  public Sqlite.Database db;
+  private Sqlite.Database db;
+  public bool pragma_foreign_key { public get; public set; default = false; }
 
   public BaseDeDatos ( string base_datos )
   requires ( base_datos != "" )
@@ -35,7 +36,14 @@ public class Salva.BaseDeDatos {
     this._base_datos = base_datos;
   }
 
-  public bool conectar () throws BaseDeDatosError {
+  public BaseDeDatos.BaseDeDatos_foreign_keys_activas ( string base_datos )
+  requires ( base_datos != "" )
+  {
+    this._base_datos = base_datos;
+    this._pragma_foreign_key = true;
+  }
+
+  private bool conectar () throws BaseDeDatosError {
     bool conexion_satisfactoria = false;
 
     GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_MESSAGE, "Base de datos a conectarse URI: %s.", this.base_datos);
@@ -206,6 +214,9 @@ public class Salva.BaseDeDatos {
     int rc;
 
     if ( this.conectar () ) {
+
+      this.foreign_keys_definir_comportamiento ();
+
       GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_MESSAGE, "Query a ejecutar: %s.", sql_query);
 
       rc = this.db.exec ( sql_query, null, null );
@@ -217,6 +228,27 @@ public class Salva.BaseDeDatos {
       }
     }
     return retorno;
+  }
+
+  private void foreign_keys_definir_comportamiento () throws BaseDeDatosError {
+    string pragma_foreign_key = "PRAGMA foreign_keys=";
+
+    if ( this._pragma_foreign_key ) {
+      pragma_foreign_key += "ON;";
+    } else {
+      pragma_foreign_key += "OFF;";
+    }
+
+      GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_MESSAGE, "Base de datos definida con: %s.", pragma_foreign_key );
+    var rc = this.db.exec ( pragma_foreign_key, null, null );
+
+    if ( rc != Sqlite.OK ) {
+      string error_mensaje = "SQL error: %d, %s.".printf ( rc, this.db.errmsg () );
+
+      GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_WARNING, error_mensaje );
+      throw new BaseDeDatosError.EXEC_QUERY ( error_mensaje );
+    }
+
   }
 
   private string armar_condicion ( string condicion ) {

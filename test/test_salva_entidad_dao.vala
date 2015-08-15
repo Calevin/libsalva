@@ -11,7 +11,7 @@ class Testing.TestEntidadDAO {
     UnaEntidad ent_para_insert = new UnaEntidad ( 1, 1, "a" );
 
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     una_entidad_dao.set_db ( base_test );
 
     try {
@@ -29,7 +29,7 @@ class Testing.TestEntidadDAO {
     UnaEntidad ent_para_insert = new UnaEntidad.UnaEntidad_sin_id ( 10, "z" );
 
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     una_entidad_dao.set_db ( base_test );
 
     try {
@@ -47,7 +47,7 @@ class Testing.TestEntidadDAO {
     UnaEntidad ent_para_actualizar = new UnaEntidad ( 1, 1, "actualizar" );
 
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     una_entidad_dao.set_db ( base_test );
 
     try {
@@ -65,7 +65,7 @@ class Testing.TestEntidadDAO {
     UnaEntidad ent_para_borrar = new UnaEntidad.UnaEntidad_id ( 1 );
 
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     una_entidad_dao.set_db ( base_test );
 
     try {
@@ -84,7 +84,7 @@ class Testing.TestEntidadDAO {
     insertar_entidades_para_test ();
 
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     una_entidad_dao.set_db ( base_test );
     try {
       Array<Salva.Entidad> entidades = una_entidad_dao.get_todos ();
@@ -116,7 +116,7 @@ class Testing.TestEntidadDAO {
     insertar_entidades_para_test ();
 
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     una_entidad_dao.set_db ( base_test );
 
     GLib.Test.message ( "Se ejecuta el select con condicion. Entidades con propiedad_string='conjunto'" );
@@ -146,7 +146,7 @@ class Testing.TestEntidadDAO {
     insertar_entidades_relacionadas_para_test ();
 
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ();
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     una_entidad_dao.set_db ( base_test );
     EntidadRelacionadaDao entidad_relacionada_dao = new EntidadRelacionadaDao ();
     entidad_relacionada_dao.set_db  ( base_test );
@@ -199,7 +199,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "****************************************" );
     GLib.Test.message ( "Se insertan entidades para el test" );
 
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     try {
       for ( int i = 2; i < 5 ; i++){
         base_test.ejecutar_query ( "INSERT INTO entidades (rowid, propiedad_unit, propiedad_string)" +
@@ -221,7 +221,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "****************************************" );
     GLib.Test.message ( "Se borran las entidades usadas durante el test" );
 
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     try {
       for ( int i = 2; i <= 5 ; i++){
         base_test.ejecutar_query ( "DELETE FROM entidades WHERE rowid=" + i.to_string () );
