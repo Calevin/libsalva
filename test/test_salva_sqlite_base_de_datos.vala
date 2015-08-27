@@ -1,9 +1,9 @@
 using Salva;
 
 /*
-* Clase para tests sobre Salva.BaseDeDatos (salva_base_de_datos.vala)
+* Clase para tests sobre Salva.SQLiteBaseDeDatos (salva_base_de_datos.vala)
 */
-class Testing.TestBaseDeDatos {
+class Testing.TestSQLiteBaseDeDatos {
 
   public static void test_insert () {
     GLib.Test.message ( "-------------------------------------------------------------------" );
@@ -11,7 +11,7 @@ class Testing.TestBaseDeDatos {
     string nombre_tabla = "entidades";
     string columnas_tabla = "rowid, propiedad_unit, propiedad_string";
     UnaEntidad ent_para_insert = new UnaEntidad ( 1, 2, "b" );
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
 
     try {
         base_test.insert ( nombre_tabla, columnas_tabla , ent_para_insert );
@@ -27,7 +27,7 @@ class Testing.TestBaseDeDatos {
     GLib.Test.message ( "Test sobre el metodo delete" );
     string nombre_tabla = "entidades";
     UnaEntidad ent_para_borrar = new UnaEntidad.UnaEntidad_id ( 1 );
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
 
     try {
         base_test.delet ( nombre_tabla, ent_para_borrar );
@@ -44,7 +44,7 @@ class Testing.TestBaseDeDatos {
     string nombre_tabla = "entidades";
     string columnas_tabla = "rowid, propiedad_unit, propiedad_string";
     UnaEntidad ent_para_update = new UnaEntidad ( 1, 2, "update" );
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
 
     try {
         base_test.update ( nombre_tabla, columnas_tabla , ent_para_update );
@@ -61,7 +61,7 @@ class Testing.TestBaseDeDatos {
     string nombre_tabla = "entidades";
     string columnas_tabla = "rowid, propiedad_unit, propiedad_string";
     string[] propiedades_entidad = {"id", "propiedad_unit", "propiedad_string"};
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
     Array<Salva.Entidad> entidades;
 
     try {
@@ -84,7 +84,7 @@ class Testing.TestBaseDeDatos {
   public static void test_ejecutar_query () {
     GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Test sobre el metodo ejecutar query" );
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
     try {
       assert ( base_test.ejecutar_query ( "SELECT 1" ) );
     } catch ( BaseDeDatosError e ) {

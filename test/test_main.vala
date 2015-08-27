@@ -16,11 +16,11 @@ class Testing.TestMain {
 
     GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Tests sobre Salva.BaseDeDatos." );
-    Test.add_func ( "/TestBaseDeDatos/test_insert", TestBaseDeDatos.test_insert );
-    Test.add_func ( "/TestBaseDeDatos/test_update", TestBaseDeDatos.test_update );
-    Test.add_func ( "/TestBaseDeDatos/test_select", TestBaseDeDatos.test_select );
-    Test.add_func ( "/TestBaseDeDatos/test_delete", TestBaseDeDatos.test_delete );
-    Test.add_func ( "/TestBaseDeDatos/test_ejecutar_query", TestBaseDeDatos.test_ejecutar_query );
+    Test.add_func ( "/TestSQLiteBaseDeDatos/test_insert", TestSQLiteBaseDeDatos.test_insert );
+    Test.add_func ( "/TestSQLiteBaseDeDatos/test_update", TestSQLiteBaseDeDatos.test_update );
+    Test.add_func ( "/TestSQLiteBaseDeDatos/test_select", TestSQLiteBaseDeDatos.test_select );
+    Test.add_func ( "/TestSQLiteBaseDeDatos/test_delete", TestSQLiteBaseDeDatos.test_delete );
+    Test.add_func ( "/TestSQLiteBaseDeDatos/test_ejecutar_query", TestSQLiteBaseDeDatos.test_ejecutar_query );
 
     GLib.Test.message ( "-------------------------------------------------------------------" );
     GLib.Test.message ( "Tests sobre Salva.UnaEntidadDao." );

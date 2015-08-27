@@ -5,7 +5,7 @@ public class Testing.EntidadRelacionadaDao : Salva.EntidadDAO {
   private string _columnas_tabla = "rowid, otra_propiedad_unit, otra_propiedad_string";
   private Type _tipo_entidad = typeof ( EntidadRelacionada );
 
-  public EntidadRelacionadaDao ( Salva.BaseDeDatos db ) {
+  public EntidadRelacionadaDao ( Salva.IBaseDeDatos db ) {
     base ( db );
   }
 

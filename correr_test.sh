@@ -7,5 +7,7 @@ make all
 sleep 1
 
 echo $'\n------ Corriendo los test ------\n'
-cd test && make
+cd test
+rm test
+make
 ./test --verbose

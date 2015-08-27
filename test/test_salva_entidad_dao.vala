@@ -10,7 +10,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo insertar" );
     UnaEntidad ent_para_insert = new UnaEntidad ( 1, 1, "a" );
 
-    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     try {
@@ -27,7 +27,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo insertar (Entidad sin ID)" );
     UnaEntidad ent_para_insert = new UnaEntidad.UnaEntidad_sin_id ( 10, "z" );
 
-    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     try {
@@ -44,7 +44,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo actualizar" );
     UnaEntidad ent_para_actualizar = new UnaEntidad ( 1, 1, "actualizar" );
 
-    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     try {
@@ -61,7 +61,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo borrar" );
     UnaEntidad ent_para_borrar = new UnaEntidad.UnaEntidad_id ( 1 );
 
-    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     try {
@@ -79,7 +79,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo get_todos" );
     insertar_entidades_para_test ();
 
-    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
     try {
       Array<Salva.Entidad> entidades = una_entidad_dao.get_todos ();
@@ -110,7 +110,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo get_todos_segun_condicion" );
     insertar_entidades_para_test ();
 
-    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
 
     GLib.Test.message ( "Se ejecuta el select con condicion. Entidades con propiedad_string='conjunto'" );
@@ -139,7 +139,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo get_entidades_relacionadas" );
     insertar_entidades_relacionadas_para_test ();
 
-    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
     EntidadRelacionadaDao entidad_relacionada_dao = new EntidadRelacionadaDao ( base_test );
 
@@ -170,7 +170,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Test sobre el metodo borrar_entidades_relacionadas" );
     insertar_entidades_relacionadas_para_test ();
 
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
     UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
     EntidadRelacionadaDao entidad_relacionada_dao = new EntidadRelacionadaDao ( base_test );
 
@@ -189,7 +189,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "****************************************" );
     GLib.Test.message ( "Se insertan entidades para el test" );
 
-    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     try {
       for ( int i = 2; i < 5 ; i++){
         base_test.ejecutar_query ( "INSERT INTO entidades (rowid, propiedad_unit, propiedad_string)" +
@@ -211,7 +211,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "****************************************" );
     GLib.Test.message ( "Se borran las entidades usadas durante el test" );
 
-    BaseDeDatos base_test = new BaseDeDatos.BaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( "./testsalva.db" );
     try {
       for ( int i = 2; i <= 5 ; i++){
         base_test.ejecutar_query ( "DELETE FROM entidades WHERE rowid=" + i.to_string () );
@@ -229,7 +229,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "****************************************" );
     GLib.Test.message ( "Se insertan entidades relacionadas para el test" );
 
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
     try {
       for ( int i = 1; i < 4 ; i++){
         base_test.ejecutar_query ( "INSERT INTO entidades_relacionadas (rowid, entidade_rowid, otra_propiedad_unit, otra_propiedad_string) " +
@@ -248,7 +248,7 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "****************************************" );
     GLib.Test.message ( "Se borran las entidades relacionadas usadas durante el test" );
 
-    BaseDeDatos base_test = new BaseDeDatos ( "./testsalva.db" );
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
     try {
       for ( int i = 1; i < 4 ; i++){
         base_test.ejecutar_query ( "DELETE FROM entidades_relacionadas WHERE rowid=" + i.to_string () );

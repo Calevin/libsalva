@@ -5,7 +5,7 @@ public class Testing.UnaEntidadDao : Salva.EntidadDAO {
   private string _columnas_tabla = "rowid, propiedad_unit, propiedad_string";
   private Type _tipo_entidad = typeof ( UnaEntidad );
 
-  public UnaEntidadDao ( Salva.BaseDeDatos db ) {
+  public UnaEntidadDao ( Salva.IBaseDeDatos db ) {
     base ( db );
   }
 

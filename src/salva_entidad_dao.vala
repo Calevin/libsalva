@@ -22,7 +22,7 @@ private const string log_domain_entidad_dao = "Salva.EntidadDAO";
 
 public abstract class Salva.EntidadDAO : GLib.Object {
 
-  protected Salva.BaseDeDatos _db;
+  protected Salva.IBaseDeDatos _db;
 
   protected abstract string[] get_propiedades ();
 
@@ -32,7 +32,7 @@ public abstract class Salva.EntidadDAO : GLib.Object {
 
   protected abstract Type get_tipo_entidad ();
 
-  protected EntidadDAO ( Salva.BaseDeDatos db ) {
+  protected EntidadDAO ( Salva.IBaseDeDatos db ) {
     this._db = db;
   }
 

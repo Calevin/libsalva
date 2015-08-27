@@ -18,32 +18,27 @@
  */
 using Salva;
 
-private const string log_domain_base_de_datos = "Salva.BaseDeDatos";
-public errordomain BaseDeDatosError {
-  OPEN_FAIL,
-  EXEC_QUERY,
-  PARSER_RESULT
-}
+private const string log_domain_base_de_datos = "Salva.SQLiteBaseDeDatos";
 
-public class Salva.BaseDeDatos {
+public class Salva.SQLiteBaseDeDatos : Salva.IBaseDeDatos, GLib.Object {
   public string base_datos { public get; public set; }
   private Sqlite.Database db;
   public bool pragma_foreign_key { public get; public set; default = false; }
 
-  public BaseDeDatos ( string base_datos )
+  public SQLiteBaseDeDatos ( string base_datos )
   requires ( base_datos != "" )
   {
     this._base_datos = base_datos;
   }
 
-  public BaseDeDatos.BaseDeDatos_foreign_keys_activas ( string base_datos )
+  public SQLiteBaseDeDatos.SQLiteBaseDeDatos_foreign_keys_activas ( string base_datos )
   requires ( base_datos != "" )
   {
     this._base_datos = base_datos;
     this._pragma_foreign_key = true;
   }
 
-  private bool conectar () throws BaseDeDatosError {
+  protected bool conectar () throws BaseDeDatosError {
     bool conexion_satisfactoria = false;
 
     GLib.log ( log_domain_base_de_datos, GLib.LogLevelFlags.LEVEL_MESSAGE, "Base de datos a conectarse URI: %s.", this.base_datos);
