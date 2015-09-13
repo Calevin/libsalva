@@ -32,6 +32,7 @@ class Testing.TestMain {
     Test.add_func ( "/TestEntidadDAO/test_get_todos_segun_condicion", TestEntidadDAO.test_get_todos_segun_condicion );
     Test.add_func ( "/TestEntidadDAO/test_get_entidades_relacionadas", TestEntidadDAO.test_get_entidades_relacionadas );
     Test.add_func ( "/TestEntidadDAO/test_borrar_entidades_relacionadas", TestEntidadDAO.test_borrar_entidades_relacionadas );
+    Test.add_func ( "/TestEntidadDAO/test_get_entidades_relacionadas_m2m", TestEntidadDAO.test_get_entidades_relacionadas_m2m );
 
     GLib.Test.message ( "Tests finalizados." );
     Test.run ();

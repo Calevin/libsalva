@@ -17,7 +17,7 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public abstract class Salva.Entidad : GLib.Object {
+public class Salva.Entidad : GLib.Object {
   public uint id { public get; protected set; }
 
   public Entidad ( uint id ) {

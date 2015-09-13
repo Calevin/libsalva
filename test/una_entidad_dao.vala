@@ -4,6 +4,7 @@ public class Testing.UnaEntidadDao : Salva.EntidadDAO {
   private string _nombre_tabla = "entidades";
   private string _columnas_tabla = "rowid, propiedad_unit, propiedad_string";
   private Type _tipo_entidad = typeof ( UnaEntidad );
+  private HashTable<string, string> _relaciones_m2m = new HashTable<string, string> (str_hash, str_equal);
 
   public UnaEntidadDao ( Salva.IBaseDeDatos db ) {
     base ( db );
@@ -23,6 +24,11 @@ public class Testing.UnaEntidadDao : Salva.EntidadDAO {
 
   protected override Type get_tipo_entidad () {
     return this._tipo_entidad;
+  }
+
+  protected override HashTable<string, string>? get_relaciones_m2m () {
+    this._relaciones_m2m.insert ( "categorias", "entidades_categorias" );
+    return this._relaciones_m2m;
   }
 
 }

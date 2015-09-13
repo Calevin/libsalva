@@ -32,6 +32,7 @@ class Testing.TestEntidadDAO {
 
     try {
       una_entidad_dao.insertar ( ent_para_insert );
+      base_test.ejecutar_query ( "DELETE FROM entidades WHERE propiedad_unit=10 AND propiedad_string=\"z\"");
     } catch ( BaseDeDatosError e ) {
         assert_not_reached();
     } finally {
@@ -66,7 +67,6 @@ class Testing.TestEntidadDAO {
 
     try {
       una_entidad_dao.borrar ( ent_para_borrar );
-      una_entidad_dao.borrar ( new UnaEntidad.UnaEntidad_id ( 2 ) );
     } catch ( BaseDeDatosError e ) {
         assert_not_reached();
     } finally {
@@ -185,6 +185,36 @@ class Testing.TestEntidadDAO {
     }
   }
 
+  public static void test_get_entidades_relacionadas_m2m () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
+    GLib.Test.message ( "Test sobre el metodo get_entidades_relacionadas_m2m" );
+    insertar_entidades_relacionadas_m2m_para_test ();
+
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
+    CategoriaDao categoria_dao = new CategoriaDao ( base_test );
+
+    try {
+      Array<Salva.Entidad> entidades = una_entidad_dao.get_entidades_relacionadas (
+                                        new UnaEntidad.UnaEntidad_id ( 1 ),
+                                        categoria_dao );
+    Categoria row_entidad;
+    int valor_propiedad = 1;
+      for (int i = 0; i < entidades.length; i++) {
+        row_entidad = entidades.index (i) as Categoria;
+
+        assert ( row_entidad.id == valor_propiedad );
+        assert ( row_entidad.nombre == "Cat" + valor_propiedad.to_string () );
+        valor_propiedad++;
+      }
+    } catch ( BaseDeDatosError e ) {
+        assert_not_reached();
+    } finally {
+      base_test = null;
+      borrar_entidades_relacionadas_m2m_para_test ();
+    }
+  }
+
   private static void insertar_entidades_para_test () {
     GLib.Test.message ( "****************************************" );
     GLib.Test.message ( "Se insertan entidades para el test" );
@@ -261,4 +291,54 @@ class Testing.TestEntidadDAO {
     GLib.Test.message ( "Se borraron las entidades relacionadas usadas durante el test" );
     GLib.Test.message ( "****************************************" );
   }
+
+  private static void insertar_entidades_relacionadas_m2m_para_test () {
+    GLib.Test.message ( "****************************************" );
+    GLib.Test.message ( "Se insertan entidades m2m relacionadas para el test" );
+
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
+    try {
+      for ( int i = 1; i < 3 ; i++){
+        base_test.ejecutar_query ( "INSERT INTO categorias (rowid, nombre, descripcion) " +
+                                      "VALUES (" + i.to_string () + ", \"Cat" + i.to_string () + "\", \"Categoria " + i.to_string () + "\")");
+        //INSERTS EN LA TABLA JOIN
+        base_test.ejecutar_query ( "INSERT INTO entidades_categorias (rowid, entidade_rowid, categoria_rowid) " +
+                                      "VALUES (" + i.to_string () + ", 1, " + i.to_string () + ")");
+      }
+      //INSERT EN TABLA JOIN SIN RELACION
+      base_test.ejecutar_query ( "INSERT INTO entidades_categorias (entidade_rowid, categoria_rowid) " +
+                                      "VALUES (3 , 2)");
+
+    } catch ( BaseDeDatosError e ) {
+        assert_not_reached();
+    } finally {
+      base_test = null;
+    }
+    GLib.Test.message ( "Se insertaron las entidades relacionadas para el test" );
+    GLib.Test.message ( "****************************************" );
+  }
+
+  private static void borrar_entidades_relacionadas_m2m_para_test () {
+    GLib.Test.message ( "****************************************" );
+    GLib.Test.message ( "Se borran las entidades relacionadas m2m usadas durante el test" );
+
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
+    try {
+      for ( int i = 1; i < 3 ; i++){
+        base_test.ejecutar_query ( "DELETE FROM categorias WHERE rowid=" + i.to_string () );
+        //DELETES EN LA TABLA JOIN
+        base_test.ejecutar_query ( "DELETE FROM entidades_categorias WHERE rowid=" + i.to_string () );
+      }
+      //DELETE EN TABLA JOIN ENTIDAD SIN RELACION
+      base_test.ejecutar_query ( "DELETE FROM entidades_categorias WHERE entidade_rowid=3 AND categoria_rowid=2");
+
+    } catch ( BaseDeDatosError e ) {
+        assert_not_reached();
+    } finally {
+      base_test = null;
+    }
+    GLib.Test.message ( "Se borraron las entidades relacionadas m2m para el test" );
+    GLib.Test.message ( "****************************************" );
+  }
+
 }
