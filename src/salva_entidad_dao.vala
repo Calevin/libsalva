@@ -108,6 +108,35 @@ public abstract class Salva.EntidadDAO : GLib.Object {
     return dao_entidad_relacionada.get_todos_segun_condicion ( condicion_in_ids );
   }
 
+  public void guardar_relacion ( Salva.Entidad entidad, Salva.Entidad entidad_relacionada, Salva.EntidadDAO dao_entidad_relacionada ) throws BaseDeDatosError {
+    string tabla_join_correspondiente = get_tabla_join_correspondiente ( dao_entidad_relacionada.get_nombre_tabla () );
+
+    if ( tabla_join_correspondiente != null ) {
+      //SI ES UNA RELACION m2m el insert se relizara en la tabla join
+      this.guardar_relacion_muchos_a_muchos ( entidad, entidad_relacionada, dao_entidad_relacionada.get_nombre_tabla (), tabla_join_correspondiente);
+    } else {
+      this.guardar_relacion_uno_a_muchos ( entidad, entidad_relacionada, dao_entidad_relacionada.get_nombre_tabla () );
+    }
+  }
+
+  private void guardar_relacion_uno_a_muchos ( Salva.Entidad entidad, Salva.Entidad entidad_relacionada,  string tabla_entidad_relacionada ) throws BaseDeDatosError {
+    string nombre_tabla_sin_s = this.quitar_letra_final ( this.get_nombre_tabla () );
+    string set_valor = nombre_tabla_sin_s + "_rowid=" + entidad.id.to_string();
+    string condicion = "rowid="+ entidad_relacionada.id.to_string();
+
+    this._db.ejecutar_query ("UPDATE " + tabla_entidad_relacionada + " SET " + set_valor + " WHERE " + condicion);
+  }
+
+  private void guardar_relacion_muchos_a_muchos ( Salva.Entidad entidad, Salva.Entidad entidad_relacionada, string nombre_tabla_entidad_relacionada, string tabla_join_correspondiente ) throws BaseDeDatosError {
+    string nombre_tabla_sin_s = this.quitar_letra_final ( this.get_nombre_tabla () );
+    string nombre_tabla_relacionada_sin_s = this.quitar_letra_final ( nombre_tabla_entidad_relacionada );
+
+    string nombre_columnas = "(" + nombre_tabla_sin_s + "_rowid," + nombre_tabla_relacionada_sin_s + "_rowid)";
+    string valores = "(" + entidad.id.to_string() + ", " + entidad_relacionada.id.to_string() + ")";
+
+    this._db.ejecutar_query ("INSERT INTO " + tabla_join_correspondiente + " " + nombre_columnas + " VALUES " + valores);
+  }
+
   private string quitar_letra_final ( string palabra ) {
     string palabra_sin_letra_final = palabra.substring ( 0, ( palabra.length - 1 ) );
     return palabra_sin_letra_final;

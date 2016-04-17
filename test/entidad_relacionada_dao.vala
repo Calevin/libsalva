@@ -1,8 +1,8 @@
 
 public class Testing.EntidadRelacionadaDao : Salva.EntidadDAO {
-  private string[] _propiedades = {"id", "otra_propiedad_unit", "otra_propiedad_string"};
+  private string[] _propiedades = {"id", "entidade_rowid", "otra_propiedad_unit", "otra_propiedad_string"};
   private string _nombre_tabla = "entidades_relacionadas";
-  private string _columnas_tabla = "rowid, otra_propiedad_unit, otra_propiedad_string";
+  private string _columnas_tabla = "rowid, entidade_rowid, otra_propiedad_unit, otra_propiedad_string";
   private Type _tipo_entidad = typeof ( EntidadRelacionada );
 
   public EntidadRelacionadaDao ( Salva.IBaseDeDatos db ) {
