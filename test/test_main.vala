@@ -35,6 +35,8 @@ class Testing.TestMain {
     Test.add_func ( "/TestEntidadDAO/test_get_entidades_relacionadas_m2m", TestEntidadDAO.test_get_entidades_relacionadas_m2m );
     Test.add_func ( "/TestEntidadDAO/test_guardar_relacion_muchos_a_muchos", TestEntidadDAO.test_guardar_relacion_muchos_a_muchos );
     Test.add_func ( "/TestEntidadDAO/test_guardar_relacion_uno_a_muchos", TestEntidadDAO.test_guardar_relacion_uno_a_muchos );
+    Test.add_func ( "/TestEntidadDAO/test_borrar_relacion_uno_a_muchos", TestEntidadDAO.test_borrar_relacion_uno_a_muchos );
+    Test.add_func ( "/TestEntidadDAO/test_borrar_relacion_muchos_a_muchos", TestEntidadDAO.test_borrar_relacion_muchos_a_muchos );
 
     GLib.Test.message ( "Tests finalizados." );
     Test.run ();

@@ -124,6 +124,8 @@ public abstract class Salva.EntidadDAO : GLib.Object {
     string set_valor = nombre_tabla_sin_s + "_rowid=" + entidad.id.to_string();
     string condicion = "rowid="+ entidad_relacionada.id.to_string();
 
+    entidad_relacionada.set_property ( nombre_tabla_sin_s + "_rowid", entidad.id );
+
     this._db.ejecutar_query ("UPDATE " + tabla_entidad_relacionada + " SET " + set_valor + " WHERE " + condicion);
   }
 
@@ -135,6 +137,37 @@ public abstract class Salva.EntidadDAO : GLib.Object {
     string valores = "(" + entidad.id.to_string() + ", " + entidad_relacionada.id.to_string() + ")";
 
     this._db.ejecutar_query ("INSERT INTO " + tabla_join_correspondiente + " " + nombre_columnas + " VALUES " + valores);
+  }
+
+  public void borrar_relacion ( Salva.Entidad entidad, Salva.Entidad entidad_relacionada, Salva.EntidadDAO dao_entidad_relacionada ) throws BaseDeDatosError {
+    string tabla_join_correspondiente = get_tabla_join_correspondiente ( dao_entidad_relacionada.get_nombre_tabla () );
+
+    if ( tabla_join_correspondiente != null ) {
+      //SI ES UNA RELACION m2m el insert se relizara en la tabla join
+      this.borrar_relacion_muchos_a_muchos ( entidad, entidad_relacionada, dao_entidad_relacionada.get_nombre_tabla (), tabla_join_correspondiente);
+    } else {
+      this.borrar_relacion_uno_a_muchos ( entidad_relacionada, dao_entidad_relacionada.get_nombre_tabla () );
+    }
+  }
+
+  private void borrar_relacion_uno_a_muchos ( Salva.Entidad entidad_relacionada,  string tabla_entidad_relacionada ) throws BaseDeDatosError {
+    string nombre_tabla_sin_s = this.quitar_letra_final ( this.get_nombre_tabla () );
+    string set_valor = nombre_tabla_sin_s + "_rowid=0";
+    string condicion = "rowid="+ entidad_relacionada.id.to_string();
+
+    entidad_relacionada.set_property ( nombre_tabla_sin_s + "_rowid", 0 );
+
+    this._db.ejecutar_query ("UPDATE " + tabla_entidad_relacionada + " SET " + set_valor + " WHERE " + condicion);
+  }
+
+  private void borrar_relacion_muchos_a_muchos ( Salva.Entidad entidad, Salva.Entidad entidad_relacionada, string nombre_tabla_entidad_relacionada, string tabla_join_correspondiente ) throws BaseDeDatosError {
+    string nombre_tabla_sin_s = this.quitar_letra_final ( this.get_nombre_tabla () );
+    string nombre_tabla_relacionada_sin_s = this.quitar_letra_final ( nombre_tabla_entidad_relacionada );
+
+    string columna_y_valor_id_entidad = nombre_tabla_sin_s + "_rowid=" + entidad.id.to_string();
+    string columna_y_valor_id_entidad_relacionada = nombre_tabla_relacionada_sin_s + "_rowid=" + entidad_relacionada.id.to_string();
+
+    this._db.ejecutar_query ("DELETE FROM " + tabla_join_correspondiente + " WHERE " + columna_y_valor_id_entidad + " AND " + columna_y_valor_id_entidad_relacionada );
   }
 
   private string quitar_letra_final ( string palabra ) {

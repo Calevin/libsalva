@@ -229,6 +229,8 @@ class Testing.TestEntidadDAO {
                                         new UnaEntidad.UnaEntidad_id ( 1 ),
                                         entidad_relacionada,
                                         entidad_relacionada_dao );
+
+        assert ( entidad_relacionada.entidade_rowid == 1 );
         base_test.ejecutar_query ( " DELETE FROM entidades_relacionadas WHERE rowid=2 " );
     } catch ( BaseDeDatosError e ) {
         assert_not_reached();
@@ -251,6 +253,51 @@ class Testing.TestEntidadDAO {
                                         new Categoria.Categoria_id ( 2 ),
                                         categoria_dao );
         base_test.ejecutar_query ( " DELETE FROM entidades_categorias WHERE entidade_rowid=1 AND categoria_rowid=2 " );
+    } catch ( BaseDeDatosError e ) {
+        assert_not_reached();
+    } finally {
+      base_test = null;
+    }
+  }
+
+  public static void test_borrar_relacion_uno_a_muchos () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
+    GLib.Test.message ( "Test sobre el metodo test_borrar_relacion_uno_a_muchos" );
+
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
+    EntidadRelacionadaDao entidad_relacionada_dao = new EntidadRelacionadaDao ( base_test );
+    EntidadRelacionada entidad_relacionada = new EntidadRelacionada.EntidadRelacionada_con_relacion ( 3, 12345,  123, "relacionada" );
+    try {
+        entidad_relacionada_dao.insertar ( entidad_relacionada );
+        una_entidad_dao.borrar_relacion (
+                                        new UnaEntidad.UnaEntidad_id ( 12345 ),
+                                        entidad_relacionada,
+                                        entidad_relacionada_dao );
+
+        assert ( entidad_relacionada.entidade_rowid == 0 );
+        base_test.ejecutar_query ( " DELETE FROM entidades_relacionadas WHERE rowid=3 " );
+    } catch ( BaseDeDatosError e ) {
+        assert_not_reached();
+    } finally {
+      base_test = null;
+    }
+  }
+
+  public static void test_borrar_relacion_muchos_a_muchos () {
+    GLib.Test.message ( "-------------------------------------------------------------------" );
+    GLib.Test.message ( "Test sobre el metodo borrar_relacion_muchos_a_muchos" );
+
+    SQLiteBaseDeDatos base_test = new SQLiteBaseDeDatos ( "./testsalva.db" );
+    UnaEntidadDao una_entidad_dao = new UnaEntidadDao ( base_test );
+    CategoriaDao categoria_dao = new CategoriaDao ( base_test );
+
+    try {
+        base_test.ejecutar_query ( " INSERT INTO entidades_categorias (entidade_rowid,categoria_rowid) VALUES (3,4) " );
+        una_entidad_dao.borrar_relacion (
+                                        new UnaEntidad.UnaEntidad_id ( 3 ),
+                                        new Categoria.Categoria_id ( 4 ),
+                                        categoria_dao );
     } catch ( BaseDeDatosError e ) {
         assert_not_reached();
     } finally {
